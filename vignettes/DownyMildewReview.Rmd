@@ -1,0 +1,19 @@
+---
+title: "Review of downy mildew models in grape vines"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{DownyMildewReview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(viticolaR)
+```
