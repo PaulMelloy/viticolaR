@@ -3,7 +3,7 @@ library(data.table)
 library(epiphytoolR)
 
 # read in the raw data
-ntamborine <- fread("../weather_north_tamborine.csv")
+ntamborine <- fread("../weather_north_tamborine.csv")[name == "PORTABLE QFRJ (North Tamborine)"]
 # save raw data to package
 usethis::use_data(ntamborine, overwrite = TRUE)
 
