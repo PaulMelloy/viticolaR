@@ -1,14 +1,14 @@
-#' Title
+#' Calculate leaf litter Moisture
 #'
-#' @param Tm
-#' @param vpd
-#' @param rain
+#' @param Tm numeric, hourly mean Temperature in degrees
+#' @param vpd numeric, hourly mean vapour pressure defiecit in hPa
+#' @param rain numeric, hourly rainfall mean in mm
 #'
 #' @return
-#' @export
 #'
 #' @examples
 calc_DOR <- function(Tm_h, vpd_h, rain_h){
+  rain <- vpd <- HT_h <- NULL
 
   if(rain > 0 | vpd == 4.5){
     M_h <- 1
