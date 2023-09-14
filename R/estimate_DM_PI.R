@@ -43,18 +43,18 @@ estimate_DM_PI <- function(w,
 
   # set start time
   if(Start == "detect"){
-    Yr <- data.table::year(w[1,"times"])
-    if(w[1,"times"] < as.POSIXct(paste0(Yr,"-06-01 00:00:00"),tz = "UTC")){
+    Yr <- data.table::year(w$times[1])
+    if(w$times[1] < as.POSIXct(paste0(Yr,"-06-01 00:00:00"),tz = "UTC")){
       Start <- as.POSIXct(paste0(Yr,"-06-01 00:00:00"),tz = "UTC")
     }else{
-      Start <- w[1,"times"]
+      Start <- w$times[1]
     }
   }
 
   if(End == "detect"){
     End <-
-      data.table::fifelse(w[.N,"times"] < as.POSIXct(paste0(Yr + 1,"-05-29 23:00:00"),tz = "UTC"),
-              w[.N,"times"],
+      data.table::fifelse(w[.N,times] < as.POSIXct(paste0(Yr + 1,"-05-29 23:00:00"),tz = "UTC"),
+              w[.N,times],
               as.POSIXct(paste0(Yr + 1,"-05-29 23:00:00"),tz = "UTC"))
   }
   # select weather data
