@@ -17,9 +17,9 @@ VignetteBuilder: knitr
 Imports: 
     data.table,
     epiphytoolR,
-    Rdpack
+    Rdpack,
+    units
 Depends: 
     R (>= 2.10)
 LazyData: true
 RdMacros: Rdpack 
-
