@@ -3,12 +3,15 @@ library(data.table)
 library(epiphytoolR)
 
 # read in the raw data
-ntamborine <- fread("../weather_north_tamborine.csv")[name == "PORTABLE QFRJ (North Tamborine)"]
+ntamborine <- fread("inst/extdata/weather_north_tamborine.csv")
 # save raw data to package
 usethis::use_data(ntamborine, overwrite = TRUE)
 
 # Can't modify package data so re-allocate it
 nt_weather <- ntamborine
+
+nt_weather[,lon := 153.1914]
+nt_weather[,lat := -27.9396]
 
 # format times
 nt_weather[,aifstime_utc := as.POSIXct(as.character(aifstime_utc),
