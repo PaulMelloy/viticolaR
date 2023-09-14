@@ -2,7 +2,6 @@
 
 export(calc_GER)
 export(calc_HT)
-export(calc_PMO)
 export(calc_SUS)
 export(estimate_DM_PI)
 import(data.table)
