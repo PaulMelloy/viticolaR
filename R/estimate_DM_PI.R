@@ -12,6 +12,7 @@
 #'
 #' @return
 #' @export
+#' @import data.table
 #' @importFrom Rdpack reprompt
 #' @references
 #' \insertAllCited{}
@@ -21,11 +22,13 @@ estimate_DM_PI <- function(w,
                            Start = "detect",
                            End = "detect",
                            SOD = 1){
+  # data.table global binding variable
+  times <- vpd <- rh <- temp <- M_h <- rain <- HT_h <- DOR <- PMO <- NULL
 
-  if(("epiphy.weather" %in% w) == FALSE) stop("'w' must be class epiphy.weather
+  if(inherits(w,"epiphy.weather") == FALSE) stop("'w' must be class epiphy.weather
                                               use 'format_weather()'")
 
-  if(length(unique(w[,.(station)])) > 1)stop("Model does not currently support weather
+  if(length(unique(w$station)) > 1)stop("Model does not currently support weather
                                              data with multiple sources of weather
                                              station data. Please select a single
                                              weather station source")
@@ -40,36 +43,39 @@ estimate_DM_PI <- function(w,
 
   # set start time
   if(Start == "detect"){
-    Yr <- year(w[1,times])
-    if(w[1,times] < as.POSIXct(paste0(Yr,"-06-01 00:00:00"),tz = "UTC")){
+    Yr <- data.table::year(w[1,"times"])
+    if(w[1,"times"] < as.POSIXct(paste0(Yr,"-06-01 00:00:00"),tz = "UTC")){
       Start <- as.POSIXct(paste0(Yr,"-06-01 00:00:00"),tz = "UTC")
     }else{
-      Start <- w[1,times]
+      Start <- w[1,"times"]
     }
   }
 
   if(End == "detect"){
     End <-
-      fifelse(w[.N,times] < as.POSIXct(paste0(Yr + 1,"-05-29 23:00:00"),tz = "UTC"),
-              w[.N,times],
+      data.table::fifelse(w[.N,"times"] < as.POSIXct(paste0(Yr + 1,"-05-29 23:00:00"),tz = "UTC"),
+              w[.N,"times"],
               as.POSIXct(paste0(Yr + 1,"-05-29 23:00:00"),tz = "UTC"))
   }
   # select weather data
   w <- w[times >= Start &
            times <= End]
 
+  if(any(is.na(w$temp)))stop("NA temperature values detected in weather, please correct,
+                              use epiphytoolR::impute_fill() or epiphytoolR::impute_diurnal()")
+
   # add VPD column
   w[, vpd := epiphytoolR::calc_vpd(rh,temp)]
 
   # Leaf litter moisture sufficient for oospore maturation
   # dichotomic variable
-  w[ , M_h := fcase(rain > 0,1,
-                    as.numeric(vpd) == 0.45, 1,
-                    as.numeric(vpd) > 0.45, 0,
-                    default = 0)]
+  w[, M_h := data.table::fcase(rain > 0, 1,
+                               as.numeric(vpd) == 0.45,1,
+                               as.numeric(vpd) > 0.45,0,
+                               default = 0)]
 
-  # Calculate hydrothermal time
-  w[, HT_h := calc_HT(temp,M_h)]
+  # Calculate cumulative hydrothermal time
+  w[, HT_h := cumsum(calc_HT(temp,M_h))]
 
   # calculate rate at which dormancy breaks
   # equation 2
@@ -78,6 +84,15 @@ estimate_DM_PI <- function(w,
   #calculate physiological maturity
   w[, PMO := MMO * DOR]
 
+  return(w)
+
+
+  # The HT is also used to calculate the length of the primary inoculum season
+  #  (PIS): PIS starts and finishes when HT = 1.3 and 8.6, respectively (Fig. 3).
+  # These values correspond to the time when 3% and 97% of the total oospores
+  #  forming the SOD have entered the PMO stage, respectively, according to Eq. (3)
+  # plot(w$times, w$PMO, type="l")
+  # plot(w$times, w$HT_h, type="l")
 }# end of estimate_DM_PLR
 
 
