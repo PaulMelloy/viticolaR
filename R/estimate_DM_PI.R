@@ -95,8 +95,13 @@ estimate_DM_PI <- function(w,
                   w[i,J_cohort] +1,
                   w[i,J_cohort])
     w[i:.N, J_cohort := c1]
-
   }
+
+  # calculate germinating oospores per cohort
+  w[,GER := sum(calc_GER(M_h,temp)), by = J_cohort]
+
+  # calculate surviving sporangia in cohort
+  w[,SUS := calc_SUS(temp,rh), by = J_cohort]
 
 
 
