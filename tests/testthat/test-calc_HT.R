@@ -241,6 +241,9 @@ test_that("I can get a value for cauldron visit on 2023-09-15",{
   w <- w[1:(which(is.na(temp))[1]-1)]
   dim(w)
 
+  # fill rain NAs with 0
+  w[is.na(rain), rain := 0]
+
 
   # run model
   w <- estimate_DM_PI(w = w)
