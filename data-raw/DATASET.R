@@ -11,8 +11,7 @@ if(Sys.info()["nodename"] == "rstudio") {
   ntamborine <- fread("inst/extdata/weather_north_tamborine.csv")
 }
 # save raw data to package
-usethis::use_data(ntamborine, overwrite = TRUE
-)
+usethis::use_data(ntamborine, overwrite = TRUE)
 
 # Can't modify package data so re-allocate it
 nt_weather <- ntamborine
