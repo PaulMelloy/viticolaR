@@ -97,12 +97,22 @@ estimate_DM_PI <- function(w,
     w[i:.N, J_cohort := c1]
   }
 
+  # Specify dry hours
+  w[, J_cohort := fifelse(rain == 0, 0, J_cohort)]
+
   # calculate germinating oospores per cohort
   w[,GER := sum(calc_GER(M_h,temp)), by = J_cohort]
 
   # calculate surviving sporangia in cohort
   w[,SUS := calc_SUS(temp,rh), by = J_cohort]
 
+  # calculate wetness durations
+  w[,WD := sum(rain >= 0.2), by = J_cohort]
+
+  # calculate wetness durations
+  w[,TWD := mean(temp), by = J_cohort]
+
+  w
 
 
   return(w)
