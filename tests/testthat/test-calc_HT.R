@@ -128,14 +128,46 @@ test_that("calc_HT returns expected results", {
 
 
 test_that("I can get a value for cauldron visit on 2023-09-15",{
+  # library(devtools)
+   library(epiphytoolR)
+  load_all()
+  # read in latest data
+  n_tambo <- fread("~/Weather observations/NTamborine.csv")
 
+  # Remove Gatton weather
+  n_tambo <- n_tambo[name != "Gatton"]
+
+  n_tambo[,lon := 153.1914]
+  n_tambo[,lat := -27.9396]
+
+  # format times
+  n_tambo[,aifstime_utc := as.POSIXct(as.character(aifstime_utc),
+                                         format = "%Y%m%d%H%M%S",
+                                         tz = "UTC")]
+
+  # for information on what the column headers relate to
+  #  http://www.bom.gov.au/catalogue/Observations-XML.pdf
+
+  n_tambo <-
+    format_weather(
+      n_tambo,
+      POSIXct_time = "aifstime_utc",
+      time_zone = "UTC",
+      temp = "air_temp",
+      rain = "rain_ten",
+      rh = "rel_hum",
+      ws = "wind_spd_kmh",
+      wd = "wind_dir_deg",
+      station = "name",
+      lon = "lon",
+      lat = "lat",
+      data_check = FALSE)
 
 
 
 
   # fill NA weather temperatures
-  w <- data.table::copy(nt_weather)
-  library(epiphytoolR)
+  w <- data.table::copy(n_tambo)
 
   # set the width of the rolling window, this will impact the smoothing of the
   #  imputation
@@ -243,6 +275,7 @@ test_that("I can get a value for cauldron visit on 2023-09-15",{
 
   # fill rain NAs with 0
   w[is.na(rain), rain := 0]
+
 
 
   # run model
