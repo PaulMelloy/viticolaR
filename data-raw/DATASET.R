@@ -5,7 +5,7 @@ library(epiphytoolR)
 if(Sys.info()["nodename"] == "rstudio") {
   # read in latest data
   ntamborine <- fread("~/Weather observations/NTamborine.csv")
-  fwrite("inst/extdata/weather_north_tamborine.csv")
+  fwrite(ntamborine,"inst/extdata/weather_north_tamborine.csv")
 } else{
   # read in the raw data
   ntamborine <- fread("inst/extdata/weather_north_tamborine.csv")
