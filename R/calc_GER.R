@@ -1,13 +1,16 @@
 #' Calculate hourly oospore germination
 #'
-#' Calculate the number of germinated oospores in an hour increment using temperature
-#'  and moisture. Equation 5 of Rossi (2008)
+#' Calculate the number of germinated oospores in an hour
+#'  increments using temperature and moisture. Equation 5 of
+#'  \insertCite{rossi_mechanistic_2008}{viticolaR}
 #'
 #' @return numeric
 #'
 #' @examples
 #' calc_GER(M_h = c(1,1,0),
 #'          T_h = c(23,25,27))
+#' @references
+#'   \insertAllCited{}
 calc_GER <- function(M_h, T_h){
   dt1 <- data.table(M_h = M_h,
                     T_h = T_h)
