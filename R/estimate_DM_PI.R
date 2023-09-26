@@ -100,11 +100,45 @@ estimate_DM_PI <- function(w,
   # Specify dry hours
   w[, J_cohort := fifelse(rain == 0, 0, J_cohort)]
 
-  # calculate germinating oospores per cohort
-  w[,GER := sum(calc_GER(M_h,temp)), by = J_cohort]
+  oospore_cohorts <- unique(w$J_cohort[w$J_cohort != 0])
+
+  cohort_list <-
+    lapply(oospore_cohorts, function(oo_cohort){
+
+      oo_cohort <- as.numeric(oo_cohort)
+
+      w_c <- data.table(indx = w[which(oo_cohort == J_cohort)[1]:.N, indx],
+                        times = w[which(oo_cohort == J_cohort)[1]:.N, times],
+                        temp = w[which(oo_cohort == J_cohort)[1]:.N, temp],
+                        rh = w[which(oo_cohort == J_cohort)[1]:.N, rh],
+                        rain = w[which(oo_cohort == J_cohort)[1]:.N, rain],
+                        vpd = w[which(oo_cohort == J_cohort)[1]:.N, vpd],
+                        M_h = w[which(oo_cohort == J_cohort)[1]:.N, M_h],
+                        PMO = w[which(oo_cohort == J_cohort)[1]:.N, PMO],
+                        J_c = w[which(oo_cohort == J_cohort)[1]:.N, J_cohort])
+
+      out <- list()
+      out[["GER"]] <- sum(calc_GER(M_h = w_c[J_c, M_h],
+                                   T_h = w_c[J_c, temp]))
+      # # calculate germinating oospores per cohort
+      # w[,GER := sum(calc_GER(M_h,temp)), by = J_cohort]
+
+      # calculate surviving sporangia in cohort
+      w_c[,SUS_h := calc_SUS(temp,rh), by = J_cohort]
+
+      out[["GER"]] <- sum(calc_GER(M_h = w_c[J, M_h],
+                                   T_h = w_c[J, temp]))
+
+
+    })
+
+
+
+
 
   # calculate surviving sporangia in cohort
-  w[,SUS := calc_SUS(temp,rh), by = J_cohort]
+  w[,SUS_h := calc_SUS(temp,rh), by = J_cohort]
+
 
   # calculate wetness durations
   w[,WD := sum(rain >= 0.2), by = J_cohort]
