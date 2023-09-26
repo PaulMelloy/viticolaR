@@ -149,10 +149,8 @@ nt_weather <- nt_weather[1:(which(is.na(temp))[1]-1)]
 # fill rain NAs with 0
 nt_weather[is.na(rain), rain := 0]
 
+# remove imp columns
+nt_weather[,c("tm_imp", "rh_imp"):= list(NULL,NULL)]
 
-
-
-
-
-
+# store and overwrite
 usethis::use_data(nt_weather, overwrite = TRUE)
