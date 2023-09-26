@@ -1,5 +1,32 @@
-calc_GEO <- function(Tm){
+#' Calculate surviving sporangia
+#'
+#' Calculate surviving sporangia from germinated oospores GER
+#'
+#' @param SUS_h numeric, hourly survivability
+#'
+#' @return numeric, cumulative survivability
+#' @export
+#'
+#' @examples
+#'
+calc_GEO <- function(SUS_h, cohort){
 
+  GEO <- SUS_h
+  n <- length(SUS_h)
+
+  if(n != length(cohort)) stop("argument lengths must match")
+
+  cohort_s <- unique(cohort)
+
+  for(C_i in cohort_s){
+    Start <- which(cohort == C_i)[1]  # first or last hour in cohort?
+    GEO[Start:n] <-
+      cumsum(SUS_h[Start:n])
+
+    GEO[GEO > 1] <- 0
+  }
+
+  return(GEO)
 }
 
 # The fourth state variable consists of the germinated oospores (GEO),
