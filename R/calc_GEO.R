@@ -9,19 +9,19 @@
 #'
 #' @examples
 #'
-calc_GEO <- function(SUS_h, cohort){
+calc_GEO <- function(PMO, SUS_h, cohort){
 
   GEO <- SUS_h
-  n <- length(SUS_h)
+  n <- length(GEO)
 
-  if(n != length(cohort)) stop("argument lengths must match")
+  if(n != length(cohort)) stop("all argument lengths must match")
+  if(n != length(PMO)) stop("all argument lengths must match")
 
   cohort_s <- unique(cohort)
 
   for(C_i in cohort_s){
     Start <- which(cohort == C_i)[1]  # first or last hour in cohort?
-    GEO[Start:n] <-
-      cumsum(SUS_h[Start:n])
+
 
     GEO[GEO > 1] <- 0
   }
