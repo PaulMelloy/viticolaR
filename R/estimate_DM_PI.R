@@ -72,7 +72,7 @@ estimate_DM_PI <- function(w,
   # Leaf litter moisture sufficient for oospore maturation
   # dichotomic variable
   w[, M_h := data.table::fcase(rain > 0, 1,
-                               as.numeric(vpd) == 0.45,1,
+                               as.numeric(vpd) <= 0.45,1,
                                as.numeric(vpd) > 0.45,0,
                                default = 0)]
 
@@ -118,16 +118,34 @@ estimate_DM_PI <- function(w,
                         J_c = w[which(oo_cohort == J_cohort)[1]:.N, J_cohort])
 
       out <- list()
-      out[["GER"]] <- sum(calc_GER(M_h = w_c[J_c, M_h],
-                                   T_h = w_c[J_c, temp]))
+      out[["GER"]] <- sum(calc_GER(M_h = w_c[J_c == oo_cohort, M_h],
+                                   T_h = w_c[J_c == oo_cohort, temp]))
       # # calculate germinating oospores per cohort
       # w[,GER := sum(calc_GER(M_h,temp)), by = J_cohort]
 
       # calculate surviving sporangia in cohort
-      w_c[,SUS_h := calc_SUS(temp,rh), by = J_cohort]
+      w_c[,SUS_h := calc_SUS(temp,rh)]
 
-      out[["GER"]] <- sum(calc_GER(M_h = w_c[J, M_h],
-                                   T_h = w_c[J, temp]))
+      # calculate Zoospore release
+      w_c[,REL := zsp_release(WD_h = sum(M_h),
+                              TWD_h = mean(temp)),
+          by = J_c]
+
+      # get p (hour of zoospore release)
+      zoo_release_ind <- w_c[which(J_c == oo_cohort &
+                                     REL == TRUE)[1], indx]
+      # if zoospores don't survive return NA
+      if(is.na(zoo_release_ind)){
+        return(NA)
+      }
+      # init SUZ
+      w_c[,SUZ_h := 0]
+
+      # calculate the zoospore survival
+      w_c[which(zoo_release_ind>=indx):.N ,
+          SUZ_h := list(cumsum(indx - zoo_release_ind)/
+                          cumsum(M_h))][SUZ_h < 1]
+
 
 
     })
