@@ -98,7 +98,7 @@ estimate_DM_PI <- function(w,
   }
 
   # Specify dry hours
-  w[, J_cohort := fifelse(rain == 0, 0, J_cohort)]
+  # w[, J_cohort := fifelse(rain == 0, 0, J_cohort)]
 
   oospore_cohorts <- unique(w$J_cohort[w$J_cohort != 0])
 
@@ -117,14 +117,19 @@ estimate_DM_PI <- function(w,
                         PMO = w[which(oo_cohort == J_cohort)[1]:.N, PMO],
                         J_c = w[which(oo_cohort == J_cohort)[1]:.N, J_cohort])
 
-      out <- list()
-      out[["GER"]] <- sum(calc_GER(M_h = w_c[J_c == oo_cohort, M_h],
-                                   T_h = w_c[J_c == oo_cohort, temp]))
-      # # calculate germinating oospores per cohort
-      # w[,GER := sum(calc_GER(M_h,temp)), by = J_cohort]
-
+      # generate cumulative sum of PMO
+      w_c[, PMO := cumsum(PMO),by = J_c]
+      # calculate germinating Oospores per hour by cohort
+      w_c[,GER := cumsum(calc_GER(M_h,temp)), by = J_c]
       # calculate surviving sporangia in cohort
       w_c[,SUS_h := calc_SUS(temp,rh)]
+
+      PMO_c <- w_c[J_c == oo_cohort, last(PMO)]
+
+      # Germinated oospores making up the surviving germinated oopspores from cohort
+      w_c[, GEO_h := fifelse(GER >=1, PMO_c, PMO)]
+      w_c[, GEO_h := fifelse(SUS_h > 1, 0, GEO_h)]
+      GEO <- w_c[J_c == oo_cohort, last(GEO_h)]
 
       # calculate Zoospore release
       w_c[,REL := zsp_release(WD_h = sum(M_h),
@@ -142,32 +147,30 @@ estimate_DM_PI <- function(w,
       w_c[,SUZ_h := 0]
 
       # calculate the zoospore survival
-      w_c[which(zoo_release_ind>=indx):.N ,
+      w_c[which(zoo_release_ind >= indx):.N ,
           SUZ_h := list(cumsum(indx - zoo_release_ind)/
-                          cumsum(M_h))][SUZ_h < 1]
+                          cumsum(M_h))]
 
+      # Determine zoospore release
+      w_c[,ZRE_h := fifelse(SUZ_h > 1, FALSE,TRUE)]
 
+      # Determine if a zoospore dispersal has occured
+      w_c[,ZDI := fifelse(rain >= 0.2 & ZRE_h, GEO_h,0)]
+
+      # Determine if zoospores successfully infect INF_h
+      w_c[,ZIN := fifelse(cumsum(M_h)*(cumsum(temp)/seq_along(temp)) >= 60,
+                          ZDI,0)]
+
+      # calculate min and max periods of incubation
+      w_c[,INC_l := cumsum(1/(24*(45.1 - 3.45 * temp + 0.073 * (temp^2))))]
+      w_c[,INC_u := cumsum(1/(24*(59.9 - 4.55 * temp + 0.095 * (temp^2))))]
+
+return(w_c)
 
     })
 
 
-
-
-
-  # calculate surviving sporangia in cohort
-  w[,SUS_h := calc_SUS(temp,rh), by = J_cohort]
-
-
-  # calculate wetness durations
-  w[,WD := sum(rain >= 0.2), by = J_cohort]
-
-  # calculate wetness durations
-  w[,TWD := mean(temp), by = J_cohort]
-
-  w
-
-
-  return(w)
+  return(cohort_list)
 
 
   # The HT is also used to calculate the length of the primary inoculum season
