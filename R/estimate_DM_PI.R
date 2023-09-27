@@ -72,8 +72,8 @@ estimate_DM_PI <- function(w,
   # Leaf litter moisture sufficient for oospore maturation
   # dichotomic variable
   w[, M_h := data.table::fcase(rain > 0, 1,
-                               as.numeric(vpd) <= 0.45,1,
-                               as.numeric(vpd) > 0.45,0,
+                               as.numeric(vpd) == 0.45,1,
+                               as.numeric(vpd) > 0.45 & rain == 0,0,
                                default = 0)]
 
   # Calculate cumulative hydrothermal time
