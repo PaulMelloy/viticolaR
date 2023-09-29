@@ -72,7 +72,7 @@ estimate_DM_PI <- function(w,
   # Leaf litter moisture sufficient for oospore maturation
   # dichotomic variable
   w[, M_h := data.table::fcase(rain > 0, 1,
-                               as.numeric(vpd) == 0.45,1,
+                               as.numeric(vpd) <= 0.45,1,
                                as.numeric(vpd) > 0.45 & rain == 0,0,
                                default = 0)]
 
@@ -106,7 +106,9 @@ estimate_DM_PI <- function(w,
     lapply(oospore_cohorts, function(oo_cohort){
 
       oo_cohort <- as.numeric(oo_cohort)
+      PMO_c <- w[which(J_cohort == oo_cohort - 1),last(PMO)]
 
+      # get all weather data from an hour before cohort starts to the end of the data
       w_c <- data.table(indx = w[which(oo_cohort == J_cohort)[1]:.N, indx],
                         times = w[which(oo_cohort == J_cohort)[1]:.N, times],
                         temp = w[which(oo_cohort == J_cohort)[1]:.N, temp],
@@ -115,26 +117,35 @@ estimate_DM_PI <- function(w,
                         vpd = w[which(oo_cohort == J_cohort)[1]:.N, vpd],
                         M_h = w[which(oo_cohort == J_cohort)[1]:.N, M_h],
                         PMO = w[which(oo_cohort == J_cohort)[1]:.N, PMO],
-                        J_c = w[which(oo_cohort == J_cohort)[1]:.N, J_cohort])
+                        J_c = w[(which(oo_cohort == J_cohort)[1]):.N, J_cohort])
 
-      # generate cumulative sum of PMO
-      w_c[, PMO := cumsum(PMO),by = J_c]
       # calculate germinating Oospores per hour by cohort
-      w_c[,GER := cumsum(calc_GER(M_h,temp)), by = J_c]
-      # calculate surviving sporangia in cohort
-      w_c[,SUS_h := calc_SUS(temp,rh)]
+      w_c[,GER := cumsum(calc_GER(M_h,temp))]
 
-      PMO_c <- w_c[J_c == oo_cohort, last(PMO)]
+      # get the number of oospores when
+      GEO_c <- PMO_c
+      GER_c_h <- w_c[GER >= 1, first(times)]
+
+      # calculate surviving sporangia in cohort
+      w_c[times >= GER_c_h,
+          SUS_h := cumsum(calc_SUS(temp,rh))]
+
+    # get cohort sporangia survival time
+      SUS_c_h <- w_c[times >= GER_c_h &
+                       SUS_h <= 1, last(times)]
+
+      # Is there a zoospore release for this cohort?
+      w_c[times >= GER_c_h & times <= SUS_c_h,
+          REL := zsp_release(WD_h = sum(M_h),
+                              TWD_h = mean(temp))]
 
       # Germinated oospores making up the surviving germinated oopspores from cohort
-      w_c[, GEO_h := fifelse(GER >=1, PMO_c, PMO)]
-      w_c[, GEO_h := fifelse(SUS_h > 1, 0, GEO_h)]
-      GEO <- w_c[J_c == oo_cohort, last(GEO_h)]
+      # w_c[, GEO_h := fifelse(GER >=1, GEO_c, PMO_c)]
+      # w_c[, GEO_h := fifelse(SUS_h > 1, 0, GEO_h)]
+      # GEO <- w_c[J_c == oo_cohort, last(GEO_h)]
 
       # calculate Zoospore release
-      w_c[,REL := zsp_release(WD_h = sum(M_h),
-                              TWD_h = mean(temp)),
-          by = J_c]
+
 
       # get p (hour of zoospore release)
       zoo_release_ind <- w_c[which(J_c == oo_cohort &
