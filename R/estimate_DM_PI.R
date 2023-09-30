@@ -185,7 +185,11 @@ return(w_c)
     })
 
 
-  return(cohort_list)
+  return(list(cohort_list = cohort_list,
+              w = w,
+              time_hours = w$times,
+              Hyd_t = w$HT_h,
+              PMO = w$PMO))
 
 
   # The HT is also used to calculate the length of the primary inoculum season
