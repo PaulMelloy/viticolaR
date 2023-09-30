@@ -153,7 +153,10 @@ estimate_DM_PI <- function(w,
                                      REL == TRUE)[1], indx]
       # if zoospores don't survive return NA
       if(is.na(zoo_release_ind)){
-        return(NA)
+        # init SUZ
+        w_c[,SUZ_h := 0]
+
+        # return(NA)
       }
       # init SUZ
       w_c[,SUZ_h := 0]
