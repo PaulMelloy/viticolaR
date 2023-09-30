@@ -42,10 +42,11 @@ estimate_DM_PI <- function(w,
   MMO <- SOD
 
   # set start time
+  # this is 1st of January in northern hemisphere, and 1st of July in the south
   if(Start == "detect"){
     Yr <- data.table::year(w$times[1])
-    if(w$times[1] < as.POSIXct(paste0(Yr,"-06-01 00:00:00"),tz = "UTC")){
-      Start <- as.POSIXct(paste0(Yr,"-06-01 00:00:00"),tz = "UTC")
+    if(w$times[1] < as.POSIXct(paste0(Yr,"-07-01 00:00:00"),tz = "UTC")){
+      Start <- as.POSIXct(paste0(Yr,"-07-01 00:00:00"),tz = "UTC")
     }else{
       Start <- w$times[1]
     }
