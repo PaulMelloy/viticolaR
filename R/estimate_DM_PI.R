@@ -137,6 +137,9 @@ estimate_DM_PI <- function(w,
 
       # Is there a zoospore release for this cohort?
       w_c[times >= GER_c_h & times <= SUS_c_h,
+          ZooWindow := TRUE]
+      # Is there a zoospore release for this cohort?
+      w_c[ZooWindow,
           REL := zsp_release(WD_h = sum(M_h),
                               TWD_h = mean(temp))]
 
@@ -189,7 +192,9 @@ return(w_c)
               w = w,
               time_hours = w$times,
               Hyd_t = w$HT_h,
-              PMO = w$PMO))
+              PMO = w$PMO,
+              cohorts = max(oospore_cohorts),
+              ))
 
 
   # The HT is also used to calculate the length of the primary inoculum season
