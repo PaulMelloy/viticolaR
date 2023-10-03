@@ -120,6 +120,8 @@ estimate_DM_PI <- function(w,
                         PMO = w[which(oo_cohort == J_cohort)[1]:.N, PMO],
                         J_c = w[(which(oo_cohort == J_cohort)[1]):.N, J_cohort])
 
+      epsilon <- w[which(oo_cohort == J_cohort), first(indx)]
+
       # calculate germinating Oospores per hour by cohort
       w_c[,GER := cumsum(calc_GER(M_h,temp))]
 
@@ -136,54 +138,129 @@ estimate_DM_PI <- function(w,
                        SUS_h <= 1, last(times)]
 
       # Is there a zoospore release for this cohort?
-      w_c[times >= GER_c_h & times <= SUS_c_h,
-          ZooWindow := TRUE]
+      w_c[,ZooWindow := fifelse(times >= GER_c_h & times <= SUS_c_h,
+                                TRUE,FALSE)]
       # Is there a zoospore release for this cohort?
-      w_c[ZooWindow,
-          REL := zsp_release(WD_h = sum(M_h),
-                              TWD_h = mean(temp))]
+      w_c[,
+          REL := fifelse(ZooWindow,zsp_release(WD_h = cumsum(M_h),
+                                               TWD_h = cumsum(temp)/seq_along(temp)),
+                         FALSE)]
 
       # Germinated oospores making up the surviving germinated oopspores from cohort
       # w_c[, GEO_h := fifelse(GER >=1, GEO_c, PMO_c)]
       # w_c[, GEO_h := fifelse(SUS_h > 1, 0, GEO_h)]
       # GEO <- w_c[J_c == oo_cohort, last(GEO_h)]
 
-      # calculate Zoospore release
-
-
       # get p (hour of zoospore release)
-      zoo_release_ind <- w_c[which(J_c == oo_cohort &
-                                     REL == TRUE)[1], indx]
-      # if zoospores don't survive return NA
-      if(is.na(zoo_release_ind)){
-        # init SUZ
-        w_c[,SUZ_h := 0]
+      zoo_release_ind <- w_c[REL == TRUE,indx][1]
 
-        # return(NA)
-      }
-      # init SUZ
+      # init SUZ; Zoospore survival
       w_c[,SUZ_h := 0]
 
+      # if zoospores don't survive return NA
+      if(is.na(zoo_release_ind)){
+        w_c[, c("ZRE_h",
+                "INC_h",
+                "ZDI_h") := list(FALSE,FALSE,FALSE)]
+       return(list(cohort = oo_cohort,
+                   w_c = w_c,
+                   spo_germination_hour = GER_c_h,
+                   spo_death_hour = SUS_c_h,
+                   zoo_release_ind = zoo_release_ind,
+                   zoo_dispersal_ind = NA_integer_,
+                   zoo_infection_ind = zoo_infection_ind,
+                   INC_h_lower = INC_h_lower,
+                   INC_h_upper = INC_h_upper,
+                   PMO_c = PMO_c))
+      }
+
       # calculate the zoospore survival
-      w_c[which(zoo_release_ind >= indx):.N ,
-          SUZ_h := list(cumsum(indx - zoo_release_ind)/
-                          cumsum(M_h))]
+      w_c[indx >= zoo_release_ind,
+          SUZ_h := fifelse(
+            indx >= zoo_release_ind,
+            cumsum(indx - zoo_release_ind)/
+              cumsum(shift(M_h,n = 1,type = "lead")),
+            NA_real_
+          )]
 
       # Determine zoospore release
-      w_c[,ZRE_h := fifelse(SUZ_h > 1, FALSE,TRUE)]
+      ## ZRE_h is the number of zoospores relseased at hour _h
+      w_c[,ZRE_h := fifelse(SUZ_h <= 1 &
+                              SUZ_h >= 0,
+                           TRUE, FALSE)]
 
       # Determine if a zoospore dispersal has occured
-      w_c[,ZDI := fifelse(rain >= 0.2 & ZRE_h, GEO_h,0)]
+      w_c[, ZDI_h := fifelse(rain >= 0.2 & ZRE_h == TRUE,
+                           TRUE,
+                           FALSE)]
+
+      # is equivalent to lowercase greek delta (ZDI_delta)
+      zoo_dispersal_ind <- w_c[ZDI_h == TRUE,first(indx)]
+
+      ## EXIT if ...
+      # if zoospores don't survive return NA
+      if(is.na(zoo_dispersal_ind)){
+        w_c[, c("ZDI_h",
+                "INC_h") := list(FALSE,FALSE)]
+        return(list(cohort = oo_cohort,
+                    w_c = w_c,
+                    spo_germination_hour = GER_c_h,
+                    spo_death_hour = SUS_c_h,
+                    zoo_release_ind = zoo_release_ind,
+                    zoo_dispersal_ind = zoo_dispersal_ind,
+                    zoo_infection_ind = NA_integer_,
+                    INC_h_lower = NA_integer_,
+                    INC_h_upper = NA_integer_,
+                    PMO_c = NA))
+      }
 
       # Determine if zoospores successfully infect INF_h
-      w_c[,ZIN := fifelse(cumsum(M_h)*(cumsum(temp)/seq_along(temp)) >= 60,
-                          ZDI,0)]
+      # initialise INF_h
+      w_c[,INF_h := FALSE]
+      w_c[indx >= zoo_dispersal_ind,
+          INF_h := fifelse(cumsum(M_h)*(cumsum(temp)/seq_along(temp)) >= 60,
+                          TRUE,FALSE)]
+
+      # is equivalent to lowercase greek iota (ZIN_iota)
+      # hour of zoospore infection
+      zoo_infection_ind <- w_c[INF_h == TRUE,first(indx)]
+
+      ## EXIT if ...
+      #  zoospores don't infect return NA
+      if(is.na(zoo_infection_ind)){
+        w_c[, c("INC_h") := list(FALSE)]
+        return(list(cohort = oo_cohort,
+                    w_c = w_c,
+                    spo_germination_hour = GER_c_h,
+                    spo_death_hour = SUS_c_h,
+                    zoo_release_ind = zoo_release_ind,
+                    zoo_dispersal_ind = zoo_dispersal_ind,
+                    zoo_infection_ind = zoo_infection_ind,
+                    INC_h_lower = NA_integer_,
+                    INC_h_upper = NA_integer_,
+                    PMO_c = NA))
+      }
 
       # calculate min and max periods of incubation
-      w_c[,INC_l := cumsum(1/(24*(45.1 - 3.45 * temp + 0.073 * (temp^2))))]
-      w_c[,INC_u := cumsum(1/(24*(59.9 - 4.55 * temp + 0.095 * (temp^2))))]
+      w_c[indx >= zoo_infection_ind,
+          INC_l := cumsum(1/(24*(45.1 - 3.45 * temp + 0.073 * (temp^2))))]
+      w_c[indx >= zoo_infection_ind,
+          INC_u := cumsum(1/(24*(59.9 - 4.55 * temp + 0.095 * (temp^2))))]
 
-return(w_c)
+      INC_h_lower <- w_c[INC_l <= 1, first(indx)]
+      INC_h_upper <- w_c[INC_u <= 1, first(indx)]
+
+
+      return(list(cohort = oo_cohort,
+                  w_c = w_c,
+                  spo_germination_hour = GER_c_h,
+                  spo_death_hour = SUS_c_h,
+                  zoo_release_ind = zoo_release_ind,
+                  zoo_dispersal_ind = zoo_dispersal_ind,
+                  zoo_infection_ind = zoo_infection_ind,
+                  INC_h_lower = INC_h_lower,
+                  INC_h_upper = INC_h_upper,
+                  PMO_c = PMO_c))
 
     })
 
@@ -193,7 +270,7 @@ return(w_c)
               time_hours = w$times,
               Hyd_t = w$HT_h,
               PMO = w$PMO,
-              cohorts = max(oospore_cohorts),
+              cohorts = max(oospore_cohorts)
               ))
 
 
