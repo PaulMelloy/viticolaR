@@ -168,10 +168,10 @@ estimate_DM_PI <- function(w,
                    spo_death_hour = SUS_c_h,
                    zoo_release_ind = zoo_release_ind,
                    zoo_dispersal_ind = NA_integer_,
-                   zoo_infection_ind = zoo_infection_ind,
-                   INC_h_lower = INC_h_lower,
-                   INC_h_upper = INC_h_upper,
-                   PMO_c = PMO_c))
+                   zoo_infection_ind = NA_integer_,
+                   INC_h_lower = NA_integer_,
+                   INC_h_upper = NA_integer_,
+                   PMO_c = NA))
       }
 
       # calculate the zoospore survival
