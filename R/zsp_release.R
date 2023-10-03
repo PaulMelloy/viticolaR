@@ -9,5 +9,5 @@
 #' zsp_release(4,16.3)
 zsp_release <- function(WD_h,TWD_h){
   x1 <- exp((-1.022 + 19.634)/TWD_h)
-  return(unique(WD_h) >= x1)
+  return(WD_h >= x1)
 }
