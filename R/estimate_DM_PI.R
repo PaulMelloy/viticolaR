@@ -127,18 +127,18 @@ estimate_DM_PI <- function(w,
 
       # get the number of oospores when
       GEO_c <- PMO_c
-      GER_c_h <- w_c[GER >= 1, first(times)]
+      GER_c_h <- w_c[GER >= 1, first(indx)]
 
       # calculate surviving sporangia in cohort
-      w_c[times >= GER_c_h,
+      w_c[indx >= GER_c_h,
           SUS_h := cumsum(calc_SUS(temp,rh))]
 
     # get cohort sporangia survival time
-      SUS_c_h <- w_c[times >= GER_c_h &
-                       SUS_h <= 1, last(times)]
+      SUS_c_h <- w_c[indx >= GER_c_h &
+                       SUS_h <= 1, last(indx)]
 
       # Is there a zoospore release for this cohort?
-      w_c[,ZooWindow := fifelse(times >= GER_c_h & times <= SUS_c_h,
+      w_c[,ZooWindow := fifelse(indx >= GER_c_h & indx <= SUS_c_h,
                                 TRUE,FALSE)]
       # Is there a zoospore release for this cohort?
       w_c[,
@@ -155,7 +155,7 @@ estimate_DM_PI <- function(w,
       zoo_release_ind <- w_c[REL == TRUE,indx][1]
 
       # init SUZ; Zoospore survival
-      w_c[,SUZ_h := 0]
+      w_c[,SUZ_h := NA]
 
       # if zoospores don't survive return NA
       if(is.na(zoo_release_ind)){
@@ -166,7 +166,7 @@ estimate_DM_PI <- function(w,
                    w_c = w_c,
                    spo_germination_hour = GER_c_h,
                    spo_death_hour = SUS_c_h,
-                   zoo_release_ind = zoo_release_ind,
+                   zoo_release_ind = NA_integer_,
                    zoo_dispersal_ind = NA_integer_,
                    zoo_infection_ind = NA_integer_,
                    INC_h_lower = NA_integer_,
@@ -175,7 +175,7 @@ estimate_DM_PI <- function(w,
       }
 
       # calculate the zoospore survival
-      w_c[indx >= zoo_release_ind,
+      w_c[,
           SUZ_h := fifelse(
             indx >= zoo_release_ind,
             cumsum(indx - zoo_release_ind)/
@@ -199,7 +199,7 @@ estimate_DM_PI <- function(w,
 
       ## EXIT if ...
       # if zoospores don't survive return NA
-      if(is.na(zoo_dispersal_ind)){
+      if(length(zoo_dispersal_ind) == 0){
         w_c[, c("ZDI_h",
                 "INC_h") := list(FALSE,FALSE)]
         return(list(cohort = oo_cohort,
@@ -207,7 +207,7 @@ estimate_DM_PI <- function(w,
                     spo_germination_hour = GER_c_h,
                     spo_death_hour = SUS_c_h,
                     zoo_release_ind = zoo_release_ind,
-                    zoo_dispersal_ind = zoo_dispersal_ind,
+                    zoo_dispersal_ind = NA_integer_,
                     zoo_infection_ind = NA_integer_,
                     INC_h_lower = NA_integer_,
                     INC_h_upper = NA_integer_,
@@ -227,7 +227,7 @@ estimate_DM_PI <- function(w,
 
       ## EXIT if ...
       #  zoospores don't infect return NA
-      if(is.na(zoo_infection_ind)){
+      if(length(zoo_infection_ind) == 0){
         w_c[, c("INC_h") := list(FALSE)]
         return(list(cohort = oo_cohort,
                     w_c = w_c,
@@ -235,7 +235,7 @@ estimate_DM_PI <- function(w,
                     spo_death_hour = SUS_c_h,
                     zoo_release_ind = zoo_release_ind,
                     zoo_dispersal_ind = zoo_dispersal_ind,
-                    zoo_infection_ind = zoo_infection_ind,
+                    zoo_infection_ind = NA_integer_,
                     INC_h_lower = NA_integer_,
                     INC_h_upper = NA_integer_,
                     PMO_c = NA))
