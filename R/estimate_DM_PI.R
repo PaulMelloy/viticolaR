@@ -264,13 +264,16 @@ estimate_DM_PI <- function(w,
     })
 
 
-  return(list(cohort_list = cohort_list,
-              w = w,
-              time_hours = w$times,
-              Hyd_t = w$HT_h,
-              PMO = w$PMO,
-              cohorts = max(oospore_cohorts)
-              ))
+  m_viticola_out <- list(cohort_list = cohort_list,
+                         w = w,
+                         time_hours = w$times,
+                         Hyd_t = w$HT_h,
+                         PMO = w$PMO,
+                         cohorts = max(oospore_cohorts)
+  )
+  class(m_viticola_out) <- c("m_viticola",class(m_viticola_out))
+
+  return(m_viticola_out)
 
 
   # The HT is also used to calculate the length of the primary inoculum season
