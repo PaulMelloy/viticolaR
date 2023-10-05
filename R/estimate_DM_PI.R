@@ -141,10 +141,11 @@ estimate_DM_PI <- function(w,
       w_c[,ZooWindow := fifelse(indx >= GER_c_h & indx <= SUS_c_h,
                                 TRUE,FALSE)]
       # Is there a zoospore release for this cohort?
-      w_c[,
-          REL := fifelse(ZooWindow,zsp_release(WD_h = cumsum(M_h),
-                                               TWD_h = cumsum(temp)/seq_along(temp)),
-                         FALSE)]
+      ## Initialise
+      w_c[, REL := FALSE]
+      w_c[ZooWindow==TRUE,
+          REL := zsp_release(WD_h = cumsum(M_h),
+                             TWD_h = cumsum(temp)/seq_along(temp))]
 
       # Germinated oospores making up the surviving germinated oopspores from cohort
       # w_c[, GEO_h := fifelse(GER >=1, GEO_c, PMO_c)]
@@ -152,13 +153,13 @@ estimate_DM_PI <- function(w,
       # GEO <- w_c[J_c == oo_cohort, last(GEO_h)]
 
       # get p (hour of zoospore release)
-      zoo_release_ind <- w_c[REL == TRUE,indx][1]
+      zoo_release_ind <- w_c[REL == TRUE,first(indx)]
 
       # init SUZ; Zoospore survival
-      w_c[,SUZ_h := NA]
+      w_c[,SUZ_h := NA_real_]
 
       # if zoospores don't survive return NA
-      if(is.na(zoo_release_ind)){
+      if(length(zoo_release_ind) == 0){
         w_c[, c("ZRE_h",
                 "INC_h",
                 "ZDI_h") := list(FALSE,FALSE,FALSE)]
@@ -175,13 +176,11 @@ estimate_DM_PI <- function(w,
       }
 
       # calculate the zoospore survival
-      w_c[,
-          SUZ_h := fifelse(
-            indx >= zoo_release_ind,
-            cumsum(indx - zoo_release_ind)/
-              cumsum(shift(M_h,n = 1,type = "lead")),
-            NA_real_
-          )]
+      SUZ <- w_c[indx >= zoo_release_ind,
+                 cumsum(indx - zoo_release_ind) /
+                           cumsum(shift(M_h, n = 1, type = "lead"))]
+      w_c[indx >= zoo_release_ind,
+          SUZ_h := SUZ]
 
       # Determine zoospore release
       ## ZRE_h is the number of zoospores relseased at hour _h
@@ -247,8 +246,8 @@ estimate_DM_PI <- function(w,
       w_c[indx >= zoo_infection_ind,
           INC_u := cumsum(1/(24*(59.9 - 4.55 * temp + 0.095 * (temp^2))))]
 
-      INC_h_lower <- w_c[INC_l <= 1, first(indx)]
-      INC_h_upper <- w_c[INC_u <= 1, first(indx)]
+      INC_h_lower <- w_c[INC_l <= 1, last(indx)]
+      INC_h_upper <- w_c[INC_u <= 1, last(indx)]
 
 
       return(list(cohort = oo_cohort,
