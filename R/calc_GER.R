@@ -4,6 +4,10 @@
 #'  increments using temperature and moisture. Equation 5 of
 #'  \insertCite{rossi_mechanistic_2008}{viticolaR}
 #'
+#' @param M_h integer, indicates if there is sufficient moisture in the hour to
+#'  trigger germination of oospores.
+#' @param T_h numeric, temperature at each hour.
+#'
 #' @return numeric
 #'
 #' @examples
