@@ -1,22 +1,4 @@
 ## code to prepare `DATASET` dataset goes here
-<<<<<<< HEAD
-library(data.table)
-library(epiphytoolR)
-
-if(Sys.info()["nodename"] == "rstudio") {
-  # read in latest data
-  ntamborine <- fread("~/Weather observations/NTamborine.csv")
-  fwrite(ntamborine,"inst/extdata/weather_north_tamborine.csv")
-} else{
-  # read in the raw data
-  ntamborine <- fread("inst/extdata/weather_north_tamborine.csv")
-}
-# save raw data to package
-usethis::use_data(ntamborine, overwrite = TRUE)
-
-# Can't modify package data so re-allocate it
-nt_weather <- ntamborine
-=======
 # library(data.table)
 # library(epiphytoolR)
 
@@ -37,7 +19,6 @@ nt_weather <- ntamborine
 #   system.file("extdata",
 #               "weather_north_tamborine.csv",
 #               package = "viticolaR"))
->>>>>>> 5cbe82b95a14d926bc38120d291856c6c69e0691
 
 nt_weather[,lon := 153.1914]
 nt_weather[,lat := -27.9396]
