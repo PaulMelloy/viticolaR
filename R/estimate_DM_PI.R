@@ -9,9 +9,17 @@
 #'  of winter, the first of June for the southern hemisphere or the 1st of January
 #'  in the northern hemisphere. Also refered to as 'morphologically mature oospores
 #'  (MMO).
+#' @param Start POSIXct, date time in UTC when to start the model running. By default
+#'  the function will 'detect' the start of the model. This model is configured
+#'  for the southern hemisphere, so the model will start on the first of July of
+#'  the first year of weather data input into the model 'w'.
+#' @param End POSIXct, date time in UTC when to end the model running. By default
+#'  the function will 'detect' the end of the model. This model is configured
+#'  for the southern hemisphere, so the model will End on the last day of June in
+#'  the first season year of the input weather data 'w'.
 #'
-#' @return list, containing the model output and downy mildew primary infection
-#'  progress
+#' @return list, class == m_viticola, containing the model output and downy mildew
+#'  primary infection progress.
 #' @export
 #' @import data.table
 #' @importFrom Rdpack reprompt
