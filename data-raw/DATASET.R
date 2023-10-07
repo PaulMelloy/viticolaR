@@ -15,7 +15,10 @@
 # #usethis::use_data(ntamborine, overwrite = TRUE)
 #
 # # Can't modify package data so re-allocate it
-# nt_weather <- ntamborine
+# nt_weather <- data.table::fread(
+#   system.file("extdata",
+#               "weather_north_tamborine.csv",
+#               package = "viticolaR"))
 
 nt_weather[,lon := 153.1914]
 nt_weather[,lat := -27.9396]
