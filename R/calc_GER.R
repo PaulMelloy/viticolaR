@@ -9,10 +9,6 @@
 #' @param T_h numeric, temperature at each hour.
 #'
 #' @return numeric
-#'
-#' @examples
-#' calc_GER(M_h = c(1,1,0),
-#'          T_h = c(23,25,27))
 #' @references
 #'   \insertAllCited{}
 calc_GER <- function(M_h, T_h){
