@@ -3,6 +3,8 @@
 #' Calculate surviving sporangia from germinated oospores GER
 #'
 #' @param SUS_h numeric, hourly survivability
+#' @param PMO numeric, proportion of physiologically mature oospores
+#' @param cohort numeric, which cohort this calculation belongs to
 #'
 #' @return numeric, cumulative survivability
 #' @noRd
