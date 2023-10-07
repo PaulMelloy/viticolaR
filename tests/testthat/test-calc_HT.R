@@ -12,7 +12,7 @@ test_that("calc_HT returns expected results", {
 
   # fill NA weather temperatures
   w <- data.table::copy(nt_weather)
-  library(epiphytoolR)
+  # library(epiphytoolR)
 
   # set the width of the rolling window, this will impact the smoothing of the
   #  imputation
@@ -129,7 +129,7 @@ test_that("calc_HT returns expected results", {
 
 test_that("I can get a value for cauldron visit on 2023-09-15",{
   # library(devtools)
-   library(epiphytoolR)
+   #library(epiphytoolR)
   load_all()
   # read in latest data
   n_tambo <- fread("~/Weather observations/NTamborine.csv")
