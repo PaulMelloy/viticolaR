@@ -4,10 +4,9 @@
 #' @param epslon hour at which the germination is triggared
 #' @param DOR_h rate at which oospores matiure at hour h
 #'
-#' @return
-#' @export
+#' @return the PMO
 #'
-#' @examples
+#' @noRd
 calc_PMO_cohort <- function(j, epslon,DOR_h){
   # mean(DOR_h[j],DOR_h[j-1])
 
