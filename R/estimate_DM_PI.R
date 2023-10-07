@@ -129,6 +129,27 @@ estimate_DM_PI <- function(w,
       GEO_c <- PMO_c
       GER_c_h <- w_c[GER >= 1, first(indx)]
 
+      # if germination has not occured yet for cohort return NAs
+      if(any(w_c$GER >= 1)== FALSE){
+        w_c[, c("SUS_h",
+                "ZooWindow",
+                "REL",
+                "SUZ_h",
+                "ZRE_h",
+                "INC_h",
+                "ZDI_h") := list(NA,FALSE,FALSE,NA_real_,FALSE,FALSE,FALSE)]
+        return(list(cohort = oo_cohort,
+                    w_c = w_c,
+                    spo_germination_hour = NA_integer_,
+                    spo_death_hour = NA_integer_,
+                    zoo_release_ind = NA_integer_,
+                    zoo_dispersal_ind = NA_integer_,
+                    zoo_infection_ind = NA_integer_,
+                    INC_h_lower = NA_integer_,
+                    INC_h_upper = NA_integer_,
+                    PMO_c = NA))
+      }
+
       # calculate surviving sporangia in cohort
       w_c[indx >= GER_c_h,
           SUS_h := cumsum(calc_SUS(temp,rh))]
@@ -264,12 +285,13 @@ estimate_DM_PI <- function(w,
     })
 
 
-  m_viticola_out <- list(cohort_list = cohort_list,
-                         w = w,
+  m_viticola_out <- list(start_time = Start,
                          time_hours = w$times,
                          Hyd_t = w$HT_h,
                          PMO = w$PMO,
-                         cohorts = max(oospore_cohorts)
+                         cohorts = max(oospore_cohorts),
+                         w = w,
+                         cohort_list = cohort_list
   )
   class(m_viticola_out) <- c("m_viticola",class(m_viticola_out))
 
