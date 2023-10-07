@@ -2,5 +2,6 @@
 
 export(calc_HT)
 export(estimate_DM_PI)
+export(get_PI_dates)
 import(data.table)
 importFrom(Rdpack,reprompt)
