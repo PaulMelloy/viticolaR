@@ -1,3 +1,19 @@
+#' Get primary infection dates
+#'
+#' @param mod model output class 'm_viticola'
+#' @param cohort integer/s, specify cohort to return the primary infection dates.
+#'  'all' can be requested and is by default.
+#' @param release_stage character vector, specify the release stage/s which you
+#'  want returned. "all" by default, or any of the following: "spo_germination_hour",
+#'  "spo_death_hour","zoo_release_ind", "zoo_dispersal_ind","zoo_infection_ind",
+#'  "INC_h_lower","INC_h_upper".
+#'
+#' @return data.table of dates each of the growth stages reach for each cohort
+#' @export
+#'
+#' @examples
+#' nt_mod <- estimate_DM_PI(nt_weather)
+#' get_PI_dates(nt_mod)
 get_PI_dates <- function(mod,
                          cohort = "all",
                          release_stage = "all") {
@@ -47,7 +63,7 @@ get_PI_dates <- function(mod,
 
   # convert indx to date_time
   dat_l[,hour := mod$start_time + (hour*3600)]
-
+  dat_l
   return(dat_l)
 
 
