@@ -9,15 +9,32 @@ estimate_DM_PI(w, Start = "detect", End = "detect", SOD = 1)
 \arguments{
 \item{w}{hourly weather data.table, class epiphy.weather.}
 
+\item{Start}{POSIXct, date time in UTC when to start the model running. By default
+the function will 'detect' the start of the model. This model is configured
+for the southern hemisphere, so the model will start on the first of July of
+the first year of weather data input into the model 'w'.}
+
+\item{End}{POSIXct, date time in UTC when to end the model running. By default
+the function will 'detect' the end of the model. This model is configured
+for the southern hemisphere, so the model will End on the last day of June in
+the first season year of the input weather data 'w'.}
+
 \item{SOD}{Proportion of seasonal oospores dose. This starts as 1 in the middle
 of winter, the first of June for the southern hemisphere or the 1st of January
 in the northern hemisphere. Also refered to as 'morphologically mature oospores
 (MMO).}
 }
+\value{
+list, class == m_viticola, containing the model output and downy mildew
+primary infection progress.
+}
 \description{
 Umbrella function to calculate the number of primary infections on grapevine
 leaves from overwintering oospores as described by
 \insertRef{rossi_mechanistic_2008}{viticolaR}
+}
+\examples{
+mod1 <- estimate_DM_PI(w = nt_weather)
 }
 \references{
 \insertAllCited{}

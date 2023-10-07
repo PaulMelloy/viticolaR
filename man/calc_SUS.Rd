@@ -11,9 +11,10 @@ calc_SUS(T_h, RH_h)
 
 \item{RH_h}{numeric, hourly relative humidity mean}
 }
+\value{
+numeric, a non-dimensional number to indicate the length of sporangia
+survival
+}
 \description{
 Calculate sporangia survival
-}
-\examples{
-calc_SUS(25,95)
 }
