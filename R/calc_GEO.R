@@ -5,10 +5,11 @@
 #' @param SUS_h numeric, hourly survivability
 #'
 #' @return numeric, cumulative survivability
-#' @export
-#'
+#' @noRd
 #' @examples
-#'
+#'calc_GEO(PMO = 1,
+#'         SUS_h = calc_SUS(20,95),
+#'         cohort = 1)
 calc_GEO <- function(PMO, SUS_h, cohort){
 
   GEO <- SUS_h
