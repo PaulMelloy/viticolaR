@@ -11,8 +11,8 @@ Install the R package and dependency (`epiphytoolR`) from github using the follo
 code
 
 ```r
-install_github("https://github.com/PaulMelloy/viticolaR")
-install_github("https://github.com/PaulMelloy/epiphytoolR")
+devtools::install_github("https://github.com/PaulMelloy/viticolaR")
+devtools::install_github("https://github.com/PaulMelloy/epiphytoolR")
 ```
 
 ### Format weather data  
