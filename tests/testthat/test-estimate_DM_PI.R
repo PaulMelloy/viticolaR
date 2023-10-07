@@ -42,15 +42,16 @@ test_that("Testing phase of model", {
   expect_false(inf_progress(1)[1] == inf_progress(1)[2])
   expect_true(inf_progress(1)[1] < inf_progress(1)[2])
 
-  for(i in 1:20){
-    print(inf_progress(i))
-    Sys.sleep(1)
-  }
+  # slowly print each cohort outcomes
+  # for(i in 1:20){
+  #   print(inf_progress(i))
+  #   Sys.sleep(1)
+  # }
 
-T1$cohort_list[[9]]$spo_germination_hour
-#T1$cohort_list[[9]][c("w_c")]
-T1$cohort_list[[9]]$INC_h_lower
-T1$cohort_list[[9]]$INC_h_upper
+
+  expect_equal(T1$cohort_list[[9]]$spo_germination_hour, 1626)
+  expect_equal(T1$cohort_list[[9]]$INC_h_lower, 1847)
+  expect_equal(T1$cohort_list[[9]]$INC_h_upper, 1918)
 
 
 })
