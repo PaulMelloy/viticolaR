@@ -12,12 +12,13 @@ RoxygenNote: 7.2.3
 Suggests: 
     knitr,
     rmarkdown,
-    units
+    units,
+    testthat
 VignetteBuilder: knitr
 Imports: 
     data.table,
     epiphytoolR,
-    Rdpack  
+    Rdpack
 Depends: 
     R (>= 2.10)
 LazyData: true
