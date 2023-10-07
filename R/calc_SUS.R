@@ -3,11 +3,8 @@
 #' @param T_h numeric, hourly temperature mean
 #' @param RH_h numeric, hourly relative humidity mean
 #'
-#' @return
-#' @export
-#'
-#' @examples
-#' calc_SUS(25,95)
+#' @return numeric, a non-dimensional number to indicate the length of sporangia
+#'  survival
 calc_SUS <- function(T_h,RH_h){
   SUS <- 1/(
     24*(5.67 * 0.47 *

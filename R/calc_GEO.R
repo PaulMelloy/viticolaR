@@ -3,25 +3,28 @@
 #' Calculate surviving sporangia from germinated oospores GER
 #'
 #' @param SUS_h numeric, hourly survivability
+#' @param PMO numeric, proportion of physiologically mature oospores
+#' @param cohort numeric, which cohort this calculation belongs to
 #'
 #' @return numeric, cumulative survivability
-#' @export
-#'
+#' @noRd
 #' @examples
-#'
-calc_GEO <- function(SUS_h, cohort){
+#'calc_GEO(PMO = 1,
+#'         SUS_h = calc_SUS(20,95),
+#'         cohort = 1)
+calc_GEO <- function(PMO, SUS_h, cohort){
 
   GEO <- SUS_h
-  n <- length(SUS_h)
+  n <- length(GEO)
 
-  if(n != length(cohort)) stop("argument lengths must match")
+  if(n != length(cohort)) stop("all argument lengths must match")
+  if(n != length(PMO)) stop("all argument lengths must match")
 
   cohort_s <- unique(cohort)
 
   for(C_i in cohort_s){
     Start <- which(cohort == C_i)[1]  # first or last hour in cohort?
-    GEO[Start:n] <-
-      cumsum(SUS_h[Start:n])
+
 
     GEO[GEO > 1] <- 0
   }

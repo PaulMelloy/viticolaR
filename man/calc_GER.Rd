@@ -6,7 +6,20 @@
 \usage{
 calc_GER(M_h, T_h)
 }
+\arguments{
+\item{M_h}{integer, indicates if there is sufficient moisture in the hour to
+trigger germination of oospores.}
+
+\item{T_h}{numeric, temperature at each hour.}
+}
+\value{
+numeric
+}
 \description{
-Calculate the number of germinated oospores in an hour increment using temperature
-and moisture. Equation 5 of Rossi (2008)
+Calculate the number of germinated oospores in an hour
+increments using temperature and moisture. Equation 5 of
+\insertCite{rossi_mechanistic_2008}{viticolaR}
+}
+\references{
+\insertAllCited{}
 }

@@ -1,4 +1,5 @@
 ## code to prepare `DATASET` dataset goes here
+<<<<<<< HEAD
 library(data.table)
 library(epiphytoolR)
 
@@ -15,6 +16,28 @@ usethis::use_data(ntamborine, overwrite = TRUE)
 
 # Can't modify package data so re-allocate it
 nt_weather <- ntamborine
+=======
+# library(data.table)
+# library(epiphytoolR)
+
+# if(Sys.info()["nodename"] == "rstudio") {
+#   # read in latest data
+#   ntamborine <- fread("~/Weather observations/NTamborine.csv")
+#   fwrite("inst/extdata/weather_north_tamborine.csv")
+# } else{
+#   # read in the raw data
+#   ntamborine <- fread("inst/extdata/weather_north_tamborine.csv")
+# }
+# # save raw data to package
+# # Edit I don't know if it is needed
+# #usethis::use_data(ntamborine, overwrite = TRUE)
+#
+# # Can't modify package data so re-allocate it
+# nt_weather <- data.table::fread(
+#   system.file("extdata",
+#               "weather_north_tamborine.csv",
+#               package = "viticolaR"))
+>>>>>>> 5cbe82b95a14d926bc38120d291856c6c69e0691
 
 nt_weather[,lon := 153.1914]
 nt_weather[,lat := -27.9396]
@@ -28,7 +51,7 @@ nt_weather[,aifstime_utc := as.POSIXct(as.character(aifstime_utc),
 #  http://www.bom.gov.au/catalogue/Observations-XML.pdf
 suppressWarnings(
 nt_weather <-
-  format_weather(
+  epiphytoolR::format_weather(
     nt_weather,
     POSIXct_time = "aifstime_utc",
     time_zone = "UTC",
@@ -56,7 +79,7 @@ nt_weather[, tm_imp := round(data.table::frollapply(
   indx,
   n = rolling_window,
   fill = NA_real_,
-  FUN = impute_fill,
+  FUN = epiphytoolR::impute_fill,
   FUN_n = rolling_window,
   times = times,
   var = temp,
@@ -87,7 +110,7 @@ while(dif > 0) {
       indx,
       n = rolling_window,
       fill = NA_real_,
-      FUN = impute_fill,
+      FUN = epiphytoolR::impute_fill,
       FUN_n = rolling_window,
       times = times,
       var = temp,
@@ -120,7 +143,7 @@ while(dif > 0) {
       indx,
       n = rolling_window,
       fill = NA_real_,
-      FUN = impute_fill,
+      FUN = epiphytoolR::impute_fill,
       FUN_n = rolling_window,
       times = times,
       var = rh,
