@@ -10,7 +10,8 @@
 #'  in the northern hemisphere. Also refered to as 'morphologically mature oospores
 #'  (MMO).
 #'
-#' @return
+#' @return list, containing the model output and downy mildew primary infection
+#'  progress
 #' @export
 #' @import data.table
 #' @importFrom Rdpack reprompt
@@ -18,6 +19,7 @@
 #' \insertAllCited{}
 #'
 #' @examples
+#' mod1 <- estimate_DM_PI(w = nt_weather)
 estimate_DM_PI <- function(w,
                            Start = "detect",
                            End = "detect",
