@@ -5,8 +5,6 @@
 #'
 #' @return numeric, a non-dimensional number to indicate the length of sporangia
 #'  survival
-#' @examples
-#' calc_SUS(25,95)
 calc_SUS <- function(T_h,RH_h){
   SUS <- 1/(
     24*(5.67 * 0.47 *
