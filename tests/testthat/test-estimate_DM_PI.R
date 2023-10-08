@@ -8,13 +8,13 @@ test_that("Testing phase of model", {
   expect_equal(length(T1$cohort_list),20)
   expect_equal(unlist(lapply(T1$cohort_list,"[[",1)), 1:20)
   expect_type(do.call("c",lapply(T1$cohort_list,"[[","spo_germination_hour")),
-                  "integer") # POSIXct ???
+                  "double") # POSIXct ???
   expect_type(do.call("c",lapply(T1$cohort_list,"[[","spo_death_hour")),
-              "integer") # POSIXct ???
+              "double") # POSIXct ???
   expect_equal(do.call("c",lapply(T1$cohort_list,"[[","spo_germination_hour"))[1:2],
-              c(637,639))
+              c(636,638))
   expect_equal(do.call("c",lapply(T1$cohort_list,"[[","spo_death_hour"))[1:2],
-               c(752,752))
+               c(751,751))
   expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","zoo_release_ind"))) == FALSE),
                17)
   expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","zoo_dispersal_ind")))),
@@ -49,9 +49,9 @@ test_that("Testing phase of model", {
   # }
 
 
-  expect_equal(T1$cohort_list[[9]]$spo_germination_hour, 862)
-  expect_equal(T1$cohort_list[[9]]$INC_h_lower, 1083)
-  expect_equal(T1$cohort_list[[9]]$INC_h_upper, 1154)
+  expect_equal(T1$cohort_list[[9]]$spo_germination_hour, 861)
+  expect_equal(T1$cohort_list[[9]]$INC_h_lower, 1082)
+  expect_equal(T1$cohort_list[[9]]$INC_h_upper, 1153)
 
 
 })
@@ -60,11 +60,11 @@ T2 <- estimate_DM_PI(nt_weather)
 test_that("Indx and hours match",{
   expect_equal(T2$start_time,as.POSIXct("2023-07-01","UTC"))
   expect_equal(T2$w[,first(times)],as.POSIXct("2023-07-01","UTC"))
-  expect_equal(T2$w[,first(indx)],1)
+  expect_equal(T2$w[,first(indx)],0)
   expect_equal(T2$w[,last(indx)],as.integer(difftime(last(T2$time_hours),
-                                                     first(T2$time_hours),units = "hours")) +1)
+                                                     first(T2$time_hours),units = "hours")))
   expect_equal(T2$cohort_list[[10]]$w_c[,last(indx)],
                as.integer(difftime(last(T2$cohort_list[[10]]$w_c$times),
-                                   as.POSIXct("2023-07-01","UTC"),units = "hours")) +1)
+                                   as.POSIXct("2023-07-01","UTC"),units = "hours")))
 })
 
