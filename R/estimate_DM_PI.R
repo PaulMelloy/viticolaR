@@ -75,7 +75,7 @@ estimate_DM_PI <- function(w,
            times <= End]
 
   # reinitialise indx
-  w[,indx := 1:.N]
+  w[,indx := (1:.N)-1]
 
   if(any(is.na(w$temp)))stop("NA temperature values detected in weather, please correct,
                               use epiphytoolR::impute_fill() or epiphytoolR::impute_diurnal()")
