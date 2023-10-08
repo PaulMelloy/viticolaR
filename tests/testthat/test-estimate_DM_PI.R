@@ -12,9 +12,9 @@ test_that("Testing phase of model", {
   expect_type(do.call("c",lapply(T1$cohort_list,"[[","spo_death_hour")),
               "integer") # POSIXct ???
   expect_equal(do.call("c",lapply(T1$cohort_list,"[[","spo_germination_hour"))[1:2],
-              c(1401,1403))
+              c(637,639))
   expect_equal(do.call("c",lapply(T1$cohort_list,"[[","spo_death_hour"))[1:2],
-               c(1516,1516))
+               c(752,752))
   expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","zoo_release_ind"))) == FALSE),
                17)
   expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","zoo_dispersal_ind")))),
@@ -49,9 +49,9 @@ test_that("Testing phase of model", {
   # }
 
 
-  expect_equal(T1$cohort_list[[9]]$spo_germination_hour, 1626)
-  expect_equal(T1$cohort_list[[9]]$INC_h_lower, 1847)
-  expect_equal(T1$cohort_list[[9]]$INC_h_upper, 1918)
+  expect_equal(T1$cohort_list[[9]]$spo_germination_hour, 862)
+  expect_equal(T1$cohort_list[[9]]$INC_h_lower, 1083)
+  expect_equal(T1$cohort_list[[9]]$INC_h_upper, 1154)
 
 
 })
