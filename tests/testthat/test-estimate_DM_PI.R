@@ -56,3 +56,15 @@ test_that("Testing phase of model", {
 
 })
 
+T2 <- estimate_DM_PI(nt_weather)
+test_that("Indx and hours match",{
+  expect_equal(T2$start_time,as.POSIXct("2023-07-01","UTC"))
+  expect_equal(T2$w[,first(times)],as.POSIXct("2023-07-01","UTC"))
+  expect_equal(T2$w[,first(indx)],1)
+  expect_equal(T2$w[,last(indx)],as.integer(difftime(last(T2$time_hours),
+                                                     first(T2$time_hours),units = "hours")) +1)
+  expect_equal(T2$cohort_list[[10]]$w_c[,last(indx)],
+               as.integer(difftime(last(T2$cohort_list[[10]]$w_c$times),
+                                   as.POSIXct("2023-07-01","UTC"),units = "hours")) +1)
+})
+
