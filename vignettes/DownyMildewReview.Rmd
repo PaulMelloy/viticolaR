@@ -14,6 +14,118 @@ knitr::opts_chunk$set(
 )
 ```
 
+## Install libraries  
+
 ```{r setup}
+library(data.table)
 library(viticolaR)
+# if epiphytoolR is not installed, install the 'dev' version from github
+if(isFALSE("epiphytoolR" %in% installed.packages()[,"Package"])){
+  devtools::install_github("https://github.com/PaulMelloy/epiphytoolR",ref = "dev")
+}
+library(epiphytoolR)
+library(ggplot2)
 ```
+
+## Define Treatments  
+Lets define the field spatially and the treatments we are applying.  
+
+### Vine varieties  
+There are four varieties of grapes, roughly evenly split over the vineyard.  
+  - Montepulciano (11 rows)  
+  - Saperavi (13 rows)  
+  - Petit Manseng (23 rows)  
+  - Fiano (13 rows)  
+
+Each row is approximately 70 meters long.
+
+### Fungicide treatments  
+  - **high** Fungicide frequency  
+  - **model** Fungicide application as per the model  
+  - **control** Negative control with no application  
+
+### Other considerations  
+  - **Fungicide type** will be threshold based, commencing with a rotation of 
+  a plant defence regulator (Serenade) and organic protectants (bicarb), increasing 
+  to protectants and synthetic fungicides depending on disease severity.  
+  - **Replicates** Four  
+  - **plot width** Three rows wide  
+  - **plot length** 10 meters long  
+  
+### Obtain spatial map of treatments
+
+```{r define_map}
+# Wine varieties
+varieties <- 4
+## Treatments
+treat_n <- 3
+# Replicates
+reps <- 4 
+# total plots
+total_p <- varieties * treat * reps
+
+# randomised split block plot 
+plots_per_range <- treat_n
+plots_per_row <- reps
+
+randomised_split_plot <-
+  rbindlist(# variety one
+    list(
+    data.table(
+       treat = as.vector(replicate(reps,sample(1:treat_n))), # randomise each block
+       plot = rep(seq(from = 1,to = total_p, by = plots_per_row),reps), # find the plot numbers in the first range
+           # replicate plot numbers for each range
+          #(rep((1:plots_per_row)-1, each=plots_per_range)) # add to each range to move 
+       variety = rep("Montepulciano",12)
+    ),
+    data.table(
+       treat = as.vector(replicate(reps,sample(1:treat_n))), # randomise each block
+       #plot = seq(from = 1,to = total_p, by = plots_per_row), # find the plot numbers in the first range
+           # replicate plot numbers for each range
+          #(rep((1:plots_per_row)-1, each=plots_per_range)) # add to each range to move 
+       variety = "Saperavi"
+    ),
+    data.table(
+       treat = as.vector(replicate(reps,sample(1:treat_n))), # randomise each block
+       #plot = seq(from = 1,to = total_p, by = plots_per_row), # find the plot numbers in the first range
+           # replicate plot numbers for each range
+          #(rep((1:plots_per_row)-1, each=plots_per_range)) # add to each range to move 
+       variety = "Petit Manseng"
+    ),
+    data.table(
+       treat = as.vector(replicate(reps,sample(1:treat_n))), # randomise each block
+       #plot = seq(from = 1,to = total_p, by = plots_per_row), # find the plot numbers in the first range
+           # replicate plot numbers for each range
+          #(rep((1:plots_per_row)-1, each=plots_per_range)) # add to each range to move 
+       variety = "Fiano"
+    ))
+  )     
+randomised_split_plot
+```  
+
+Here is our treatment list
+
+```{r}
+field_plan <- 
+  create_inf_xyz(plot_length = 10,
+               plot_width = 1,
+               paddock_length = 70,
+               paddock_width = (3 * (12+13+23+13) + 10),# number of rows of each variety +10m for outside buffer
+               infected_plots = total_p,
+               n_plots =  total_p,
+               external_buffer_end = 2,
+               external_buffer_adj = 5,
+               internal_buffer_adj = 2,
+               internal_buffer_end = 5,
+               verbose = TRUE)
+
+head(field_plan)
+```
+Let's plot this to see if it is suitable  
+
+```{r}
+field_plan |>
+  ggplot(aes(x=x,y=y,z=load))+
+  geom_raster()
+```
+
