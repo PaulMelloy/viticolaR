@@ -29,7 +29,7 @@ get_PI_dates <- function(mod,
   }
 
   # ready stages
-  r_stages <- c("spo_germination_hour","spo_death_hour","zoo_release_ind",
+  r_stages <- c("spo_germination_hour","spo_death_hour","mature_zoopores","zoo_release_ind",
                 "zoo_dispersal_ind","zoo_infection_ind","INC_h_lower","INC_h_upper")
 
   if(release_stage == "all") release_stage <- r_stages
