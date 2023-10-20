@@ -4,7 +4,7 @@ test_that("Conveniance function returns expected", {
   T1 <- get_PI_dates(mod = Tmod)
 
   expect_s3_class(T1,"data.table")
-  expect_equal(dim(T1),c(140,3))
+  expect_equal(dim(T1),c(160,3))
   expect_type(T1$cohort,"integer")
   expect_s3_class(T1$primary_infection_stage,"factor") # factor
   expect_s3_class(T1$hour,"POSIXct") # POSIXct
