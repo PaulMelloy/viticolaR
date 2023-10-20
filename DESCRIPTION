@@ -13,6 +13,7 @@ Suggests:
     knitr,
     rmarkdown,
     units,
+    ggplot2,
     testthat
 VignetteBuilder: knitr
 Imports: 
