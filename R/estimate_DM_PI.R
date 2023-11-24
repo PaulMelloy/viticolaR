@@ -53,12 +53,17 @@ estimate_DM_PI <- function(w,
   #  MMO = SOD.
   MMO <- SOD
 
+
+
   # set start time
   # this is 1st of January in northern hemisphere, and 1st of July in the south
   if(Start == "detect"){
-    Yr <- data.table::year(w$times[1])
-    if(w$times[1] < as.POSIXct(paste0(Yr,"-07-01 00:00:00"),tz = "UTC")){
-      Start <- as.POSIXct(paste0(Yr,"-07-01 00:00:00"),tz = "UTC")
+    season_yr <- fifelse(data.table::month(Sys.time()) < 7,
+                         data.table::year(Sys.time()) -1,
+                         data.table::year(Sys.time()))
+
+    if(w$times[1] < as.POSIXct(paste0(season_yr,"-07-01 00:00:00"),tz = "UTC")){
+      Start <- as.POSIXct(paste0(season_yr,"-07-01 00:00:00"),tz = "UTC")
     }else{
       Start <- w$times[1]
     }
@@ -66,9 +71,10 @@ estimate_DM_PI <- function(w,
 
   if(End == "detect"){
     End <-
-      data.table::fifelse(w[.N,times] < as.POSIXct(paste0(Yr + 1,"-05-29 23:00:00"),tz = "UTC"),
+      data.table::fifelse(
+        w[.N,times] < as.POSIXct(paste0(season_yr + 1,"-05-29 23:00:00"),tz = "UTC"),
               w[.N,times],
-              as.POSIXct(paste0(Yr + 1,"-05-29 23:00:00"),tz = "UTC"))
+              as.POSIXct(paste0(season_yr + 1,"-05-29 23:00:00"),tz = "UTC"))
   }
   # select weather data
   w <- w[times >= Start &
