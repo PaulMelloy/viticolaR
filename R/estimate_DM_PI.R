@@ -124,13 +124,17 @@ estimate_DM_PI <- function(w,
 
   oospore_cohorts <- unique(w$J_cohort[w$J_cohort != 0])
 
+  # calculate the response of each PMO cohort
   cohort_list <-
     lapply(oospore_cohorts, function(oo_cohort){
 
       oo_cohort <- as.numeric(oo_cohort)
+      # Get number of physiological mature oospores ready to germinate in this
+      #  cohort
       PMO_c <- w[which(J_cohort == oo_cohort - 1),last(PMO)]
 
       # get all weather data from an hour before cohort starts to the end of the data
+      #  This includes weather data for future cohorts
       w_c <- data.table(indx = w[which(oo_cohort == J_cohort)[1]:.N, indx],
                         times = w[which(oo_cohort == J_cohort)[1]:.N, times],
                         temp = w[which(oo_cohort == J_cohort)[1]:.N, temp],
@@ -141,13 +145,16 @@ estimate_DM_PI <- function(w,
                         PMO = w[which(oo_cohort == J_cohort)[1]:.N, PMO],
                         J_c = w[(which(oo_cohort == J_cohort)[1]):.N, J_cohort])
 
+      # get first hour in cohort
+      #  This is also when sporangia start germinating from oospores in leaf litter
       epsilon <- w[which(oo_cohort == J_cohort), first(indx)]
 
       # calculate germinating Oospores per hour by cohort
       w_c[,GER := cumsum(calc_GER(M_h,temp))]
 
-      # get the number of oospores when
+      # get the number of physiologically mature oospores which have germinated
       GEO_c <- PMO_c
+      # Get the time when all sporangia have finished germinating from oospores
       GER_c_h <- w_c[GER >= 1, first(indx)]
 
       # if germination has not occured yet for cohort return NAs
@@ -161,7 +168,7 @@ estimate_DM_PI <- function(w,
                 "ZDI_h") := list(NA,FALSE,FALSE,NA_real_,FALSE,FALSE,FALSE)]
         return(list(cohort = oo_cohort,
                     w_c = w_c,
-                    spo_germination_hour = NA_integer_,
+                    GEO_h = NA_integer_,
                     spo_death_hour = NA_integer_,
                     mature_zoopores = NA,
                     zoo_release_ind = NA_integer_,
@@ -208,7 +215,7 @@ estimate_DM_PI <- function(w,
                 "ZDI_h") := list(FALSE,FALSE,FALSE)]
        return(list(cohort = oo_cohort,
                    w_c = w_c,
-                   spo_germination_hour = GER_c_h,
+                   GEO_h = GER_c_h,
                    spo_death_hour = SUS_c_h,
                    mature_zoopores = w_c[ZooWindow == TRUE, last(indx)],
                    zoo_release_ind = NA_integer_,
@@ -247,7 +254,7 @@ estimate_DM_PI <- function(w,
                 "INC_h") := list(FALSE,FALSE)]
         return(list(cohort = oo_cohort,
                     w_c = w_c,
-                    spo_germination_hour = GER_c_h,
+                    GEO_h = GER_c_h,
                     spo_death_hour = SUS_c_h,
                     mature_zoopores = w_c[ZooWindow == TRUE, last(indx)],
                     zoo_release_ind = zoo_release_ind,
@@ -275,7 +282,7 @@ estimate_DM_PI <- function(w,
         w_c[, c("INC_h") := list(FALSE)]
         return(list(cohort = oo_cohort,
                     w_c = w_c,
-                    spo_germination_hour = GER_c_h,
+                    GEO_h = GER_c_h,
                     spo_death_hour = SUS_c_h,
                     mature_zoopores = w_c[ZooWindow == TRUE, last(indx)],
                     zoo_release_ind = zoo_release_ind,
@@ -298,7 +305,7 @@ estimate_DM_PI <- function(w,
 
       return(list(cohort = oo_cohort,
                   w_c = w_c,
-                  spo_germination_hour = GER_c_h,
+                  GEO_h = GER_c_h,
                   spo_death_hour = SUS_c_h,
                   mature_zoopores = w_c[ZooWindow == TRUE, last(indx)],
                   zoo_release_ind = zoo_release_ind,

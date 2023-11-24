@@ -7,11 +7,11 @@ test_that("Testing phase of model", {
   expect_equal(length(T1),7)
   expect_equal(length(T1$cohort_list),20)
   expect_equal(unlist(lapply(T1$cohort_list,"[[",1)), 1:20)
-  expect_type(do.call("c",lapply(T1$cohort_list,"[[","spo_germination_hour")),
+  expect_type(do.call("c",lapply(T1$cohort_list,"[[","GEO_h")),
                   "double") # POSIXct ???
   expect_type(do.call("c",lapply(T1$cohort_list,"[[","spo_death_hour")),
               "double") # POSIXct ???
-  expect_equal(do.call("c",lapply(T1$cohort_list,"[[","spo_germination_hour"))[1:2],
+  expect_equal(do.call("c",lapply(T1$cohort_list,"[[","GEO_h"))[1:2],
               c(636,638))
   expect_equal(do.call("c",lapply(T1$cohort_list,"[[","spo_death_hour"))[1:2],
                c(711,713))
@@ -32,7 +32,7 @@ test_that("Testing phase of model", {
   expect_s3_class(T1$cohort_list[[1]]$w_c, "data.table")
 
   inf_progress <- function(x){
-    c(T1$cohort_list[[x]]$spo_germination_hour,
+    c(T1$cohort_list[[x]]$GEO_h,
       T1$cohort_list[[x]]$spo_death_hour,
       T1$cohort_list[[x]]$zoo_release_ind,
       T1$cohort_list[[x]]$zoo_dispersal_ind,
@@ -49,7 +49,7 @@ test_that("Testing phase of model", {
   # }
 
 
-  expect_equal(T1$cohort_list[[9]]$spo_germination_hour, 861)
+  expect_equal(T1$cohort_list[[9]]$GEO_h, 861)
   expect_equal(T1$cohort_list[[9]]$INC_h_lower, 1082)
   expect_equal(T1$cohort_list[[9]]$INC_h_upper, 1153)
 
