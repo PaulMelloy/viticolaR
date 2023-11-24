@@ -14,7 +14,7 @@ test_that("Testing phase of model", {
   expect_equal(do.call("c",lapply(T1$cohort_list,"[[","spo_germination_hour"))[1:2],
               c(636,638))
   expect_equal(do.call("c",lapply(T1$cohort_list,"[[","spo_death_hour"))[1:2],
-               c(751,751))
+               c(711,713))
   expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","zoo_release_ind"))) == FALSE),
                17)
   expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","zoo_dispersal_ind")))),
