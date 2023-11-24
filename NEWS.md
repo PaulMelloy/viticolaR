@@ -1,5 +1,6 @@
 # viticolaR 0.0.2
- * correct indexing and hours bug to provide accuate date times
+ * correct indexing and hours bug to provide accurate date times  
+ * _Bug fix_ correct sporangia survival formula prevent Inf values
 
 # viticolaR 0.0.1
 **First Release 2023-10-07**
