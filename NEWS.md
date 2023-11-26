@@ -1,3 +1,5 @@
+# viticolaR 0.0.3
+
 # viticolaR 0.0.2
  * correct indexing and hours bug to provide accurate date times  
  * _Bug fix_ correct sporangia survival formula prevent Inf values  
