@@ -13,8 +13,8 @@ get_PI_dates(mod, cohort = "all", release_stage = "all")
 'all' can be requested and is by default.}
 
 \item{release_stage}{character vector, specify the release stage/s which you
-want returned. "all" by default, or any of the following: "spo_germination_hour",
-"spo_death_hour","zoo_release_ind", "zoo_dispersal_ind","zoo_infection_ind",
+want returned. "all" by default, or any of the following: "GEO_h",
+"SUS_death_h","ZRE_ind", "SUZ_death_ind", "ZDI_ind","ZIN_ind",
 "INC_h_lower","INC_h_upper".}
 }
 \value{
