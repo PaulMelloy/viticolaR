@@ -35,7 +35,7 @@ estimate_DM_PI <- function(w,
   # data.table global binding variable
   times <- vpd <- rh <- temp <- M_h <- rain <- HT_h <- DOR <- PMO <- J_cohort <-
     indx <- GER <- SUS_h <- ZooWindow <- REL <- SUZ_h <- ZRE_h <- ZDI_h <-
-    INF_h <- INC_l <- INC_u <- NULL
+    INF_h <- INC_l <- GEO <- INC_u <- NULL
 
   if(inherits(w,"epiphy.weather") == FALSE) stop("'w' must be class epiphy.weather
                                               use 'format_weather()'")
