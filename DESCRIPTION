@@ -14,7 +14,8 @@ Suggests:
     rmarkdown,
     units,
     ggplot2,
-    testthat
+    testthat,
+    devtools
 VignetteBuilder: knitr
 Imports: 
     data.table,
