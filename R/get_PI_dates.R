@@ -29,12 +29,12 @@ get_PI_dates <- function(mod,
   }
 
   # ready stages
-  r_stages <- c("GEO_h","SUS_death_h","ZRE_ind","SUZ_death_ind",
-                "ZDI_ind","ZIN_ind","INC_h_lower","INC_h_upper")
+  r_stages <- c("GEO_h","SUS_death_h","ZRE_ind","ZDI_ind","ZIN_ind",
+                "SUZ_death_ind","INC_h_lower","INC_h_upper")
 
   if(release_stage == "all") release_stage <- r_stages
 
-  # check the relsease stage is input as an expected variable
+  # check the release stage is input as an expected variable
   if(any(release_stage %in% r_stages) == FALSE){
     stop("'release_stage' input not understood
             Please input one of the following stage variables: ",
