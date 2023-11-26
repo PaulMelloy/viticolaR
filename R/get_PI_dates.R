@@ -4,8 +4,8 @@
 #' @param cohort integer/s, specify cohort to return the primary infection dates.
 #'  'all' can be requested and is by default.
 #' @param release_stage character vector, specify the release stage/s which you
-#'  want returned. "all" by default, or any of the following: "spo_germination_hour",
-#'  "spo_death_hour","zoo_release_ind", "zoo_dispersal_ind","zoo_infection_ind",
+#'  want returned. "all" by default, or any of the following: "GEO_h",
+#'  "SUS_death_h","ZRE_ind", "SUZ_death_ind", "ZDI_ind","zoo_infection_ind",
 #'  "INC_h_lower","INC_h_upper".
 #'
 #' @return data.table of dates each of the growth stages reach for each cohort
@@ -29,8 +29,8 @@ get_PI_dates <- function(mod,
   }
 
   # ready stages
-  r_stages <- c("GEO_h","spo_death_hour","mature_zoopores","zoo_release_ind",
-                "zoo_dispersal_ind","zoo_infection_ind","INC_h_lower","INC_h_upper")
+  r_stages <- c("GEO_h","SUS_death_h","ZRE_ind","SUZ_death_ind",
+                "ZDI_ind","zoo_infection_ind","INC_h_lower","INC_h_upper")
 
   if(release_stage == "all") release_stage <- r_stages
 

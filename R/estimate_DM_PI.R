@@ -169,11 +169,11 @@ estimate_DM_PI <- function(w,
         return(list(cohort = oo_cohort,
                     w_c = w_c,
                     GEO_h = NA_integer_,
-                    spo_death_hour = NA_integer_,
-                    mature_zoopores = NA,
-                    zoo_release_ind = NA_integer_,
-                    zoo_dispersal_ind = NA_integer_,
-                    zoo_infection_ind = NA_integer_,
+                    SUS_death_h = NA_integer_,
+                    ZRE_ind = NA_integer_,
+                    ZDI_ind = NA_integer_,
+                    ZIN_ind = NA_integer_,
+                    SUZ_death_ind = NA_integer_,
                     INC_h_lower = NA_integer_,
                     INC_h_upper = NA_integer_,
                     PMO_c = NA))
@@ -186,8 +186,14 @@ estimate_DM_PI <- function(w,
     # get cohort sporangia survival time
       SUS_c_h <- w_c[indx >= GER_c_h &
                        SUS_h <= 1, last(indx)]
+      # After sporangia die remove PMO from cohort
+      w_c[, GEO := fifelse(indx >= GER_c_h &
+                             SUS_h <= 1,
+                           GEO_c,
+                           0)]
 
-      # Is there a zoospore release for this cohort?
+
+      # How long are zoospores Is there a zoospore release for this cohort?
       w_c[,ZooWindow := fifelse(indx >= GER_c_h & indx <= SUS_c_h,
                                 TRUE,FALSE)]
       # Is there a zoospore release for this cohort?
@@ -203,34 +209,34 @@ estimate_DM_PI <- function(w,
       # GEO <- w_c[J_c == oo_cohort, last(GEO_h)]
 
       # get p (hour of zoospore release)
-      zoo_release_ind <- w_c[REL == TRUE,first(indx)]
+      ZRE_ind <- w_c[REL == TRUE,first(indx)]
 
       # init SUZ; Zoospore survival
       w_c[,SUZ_h := NA_real_]
 
       # if zoospores don't survive return NA
-      if(length(zoo_release_ind) == 0){
+      if(length(ZRE_ind) == 0){
         w_c[, c("ZRE_h",
                 "INC_h",
                 "ZDI_h") := list(FALSE,FALSE,FALSE)]
        return(list(cohort = oo_cohort,
                    w_c = w_c,
                    GEO_h = GER_c_h,
-                   spo_death_hour = SUS_c_h,
-                   mature_zoopores = w_c[ZooWindow == TRUE, last(indx)],
-                   zoo_release_ind = NA_integer_,
-                   zoo_dispersal_ind = NA_integer_,
-                   zoo_infection_ind = NA_integer_,
+                   SUS_death_h = SUS_c_h,
+                   ZRE_ind = NA_integer_,
+                   ZDI_ind = NA_integer_,
+                   ZIN_ind = NA_integer_,
+                   SUZ_death_ind = NA_integer_,
                    INC_h_lower = NA_integer_,
                    INC_h_upper = NA_integer_,
                    PMO_c = NA))
       }
 
       # calculate the zoospore survival
-      SUZ <- w_c[indx >= zoo_release_ind,
-                 cumsum(indx - zoo_release_ind) /
+      SUZ <- w_c[indx >= ZRE_ind,
+                 cumsum(indx - ZRE_ind) /
                            cumsum(shift(M_h, n = 1, type = "lead"))]
-      w_c[indx >= zoo_release_ind,
+      w_c[indx >= ZRE_ind,
           SUZ_h := SUZ]
 
       # Determine zoospore release
@@ -245,21 +251,21 @@ estimate_DM_PI <- function(w,
                            FALSE)]
 
       # is equivalent to lowercase greek delta (ZDI_delta)
-      zoo_dispersal_ind <- w_c[ZDI_h == TRUE,first(indx)]
+      ZDI_ind <- w_c[ZDI_h == TRUE,first(indx)]
 
       ## EXIT if ...
       # if zoospores don't survive return NA
-      if(length(zoo_dispersal_ind) == 0){
+      if(length(ZDI_ind) == 0){
         w_c[, c("ZDI_h",
                 "INC_h") := list(FALSE,FALSE)]
         return(list(cohort = oo_cohort,
                     w_c = w_c,
                     GEO_h = GER_c_h,
-                    spo_death_hour = SUS_c_h,
-                    mature_zoopores = w_c[ZooWindow == TRUE, last(indx)],
-                    zoo_release_ind = zoo_release_ind,
-                    zoo_dispersal_ind = NA_integer_,
-                    zoo_infection_ind = NA_integer_,
+                    SUS_death_h = SUS_c_h,
+                    ZRE_ind = ZRE_ind,
+                    ZDI_ind = NA_integer_,
+                    ZIN_ind = NA_integer_,
+                    SUZ_death_ind = w_c[ZRE_h == TRUE, last(indx)],
                     INC_h_lower = NA_integer_,
                     INC_h_upper = NA_integer_,
                     PMO_c = NA))
@@ -268,7 +274,8 @@ estimate_DM_PI <- function(w,
       # Determine if zoospores successfully infect INF_h
       # initialise INF_h
       w_c[,INF_h := FALSE]
-      w_c[indx >= zoo_dispersal_ind,
+      w_c[indx >= ZDI_ind &
+            ZRE_h == TRUE, # Infection has to occur before zoospores dry out which is calculated from ZRE_h
           INF_h := fifelse(cumsum(M_h)*(cumsum(temp)/seq_along(temp)) >= 60,
                           TRUE,FALSE)]
 
@@ -283,11 +290,11 @@ estimate_DM_PI <- function(w,
         return(list(cohort = oo_cohort,
                     w_c = w_c,
                     GEO_h = GER_c_h,
-                    spo_death_hour = SUS_c_h,
-                    mature_zoopores = w_c[ZooWindow == TRUE, last(indx)],
-                    zoo_release_ind = zoo_release_ind,
-                    zoo_dispersal_ind = zoo_dispersal_ind,
-                    zoo_infection_ind = NA_integer_,
+                    SUS_death_h = SUS_c_h,
+                    ZRE_ind = ZRE_ind,
+                    ZDI_ind = ZDI_ind,
+                    ZIN_ind = NA_integer_,
+                    SUZ_death_ind = w_c[ZRE_h == TRUE, last(indx)],
                     INC_h_lower = NA_integer_,
                     INC_h_upper = NA_integer_,
                     PMO_c = NA))
@@ -306,11 +313,11 @@ estimate_DM_PI <- function(w,
       return(list(cohort = oo_cohort,
                   w_c = w_c,
                   GEO_h = GER_c_h,
-                  spo_death_hour = SUS_c_h,
-                  mature_zoopores = w_c[ZooWindow == TRUE, last(indx)],
-                  zoo_release_ind = zoo_release_ind,
-                  zoo_dispersal_ind = zoo_dispersal_ind,
-                  zoo_infection_ind = zoo_infection_ind,
+                  SUS_death_h = SUS_c_h,
+                  ZRE_ind = ZRE_ind,
+                  ZDI_ind = ZDI_ind,
+                  ZIN_ind = zoo_infection_ind,
+                  SUZ_death_ind = w_c[ZRE_h == TRUE, last(indx)],
                   INC_h_lower = INC_h_lower,
                   INC_h_upper = INC_h_upper,
                   PMO_c = PMO_c))
