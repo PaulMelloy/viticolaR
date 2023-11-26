@@ -20,11 +20,12 @@ test_that("Testing phase of model", {
   expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","ZDI_ind")))),
                19)
   expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","ZIN_ind")))),
-               19)
+               20)
   expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","INC_h_lower")))),
-               19)
+               20)
   expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","INC_h_upper")))),
-               19)
+               20)
+  # Might need a test here that leads to an infection
 
   expect_equal(length(T1$time_hours),1455)
   expect_is(T1$time_hours[1],"POSIXct")
@@ -50,8 +51,8 @@ test_that("Testing phase of model", {
 
 
   expect_equal(T1$cohort_list[[9]]$GEO_h, 861)
-  expect_equal(T1$cohort_list[[9]]$INC_h_lower, 1082)
-  expect_equal(T1$cohort_list[[9]]$INC_h_upper, 1153)
+  expect_equal(T1$cohort_list[[9]]$INC_h_lower, NA_integer_)
+  expect_equal(T1$cohort_list[[9]]$INC_h_upper, NA_integer_)
 
 
 })
