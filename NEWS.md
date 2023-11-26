@@ -1,4 +1,5 @@
 # viticolaR 0.0.3
+ * init `dev` version  
 
 # viticolaR 0.0.2
  * correct indexing and hours bug to provide accurate date times  
