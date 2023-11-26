@@ -10,7 +10,7 @@ test_that("Conveniance function returns expected", {
   expect_s3_class(T1$hour,"POSIXct") # POSIXct
 
   # library(ggplot2)
-  # T1[primary_infection_stage != "spo_death_hour" &
+  # T1[primary_infection_stage != "SUS_death_h" &
   #      is.na(hour) == FALSE] |>
   # ggplot(data = , aes(x = hour, y = primary_infection_stage, group = factor(cohort)))+
   #   geom_line()

@@ -9,17 +9,17 @@ test_that("Testing phase of model", {
   expect_equal(unlist(lapply(T1$cohort_list,"[[",1)), 1:20)
   expect_type(do.call("c",lapply(T1$cohort_list,"[[","GEO_h")),
                   "double") # POSIXct ???
-  expect_type(do.call("c",lapply(T1$cohort_list,"[[","spo_death_hour")),
+  expect_type(do.call("c",lapply(T1$cohort_list,"[[","SUS_death_h")),
               "double") # POSIXct ???
   expect_equal(do.call("c",lapply(T1$cohort_list,"[[","GEO_h"))[1:2],
               c(636,638))
-  expect_equal(do.call("c",lapply(T1$cohort_list,"[[","spo_death_hour"))[1:2],
+  expect_equal(do.call("c",lapply(T1$cohort_list,"[[","SUS_death_h"))[1:2],
                c(711,713))
-  expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","zoo_release_ind"))) == FALSE),
+  expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","ZRE_ind"))) == FALSE),
                17)
-  expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","zoo_dispersal_ind")))),
+  expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","ZDI_ind")))),
                19)
-  expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","zoo_infection_ind")))),
+  expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","ZIN_ind")))),
                19)
   expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","INC_h_lower")))),
                19)
@@ -33,10 +33,10 @@ test_that("Testing phase of model", {
 
   inf_progress <- function(x){
     c(T1$cohort_list[[x]]$GEO_h,
-      T1$cohort_list[[x]]$spo_death_hour,
-      T1$cohort_list[[x]]$zoo_release_ind,
-      T1$cohort_list[[x]]$zoo_dispersal_ind,
-      T1$cohort_list[[x]]$zoo_infection_ind
+      T1$cohort_list[[x]]$SUS_death_h,
+      T1$cohort_list[[x]]$ZRE_ind,
+      T1$cohort_list[[x]]$ZDI_ind,
+      T1$cohort_list[[x]]$ZIN_ind
     )
   }
   expect_false(inf_progress(1)[1] == inf_progress(1)[2])
