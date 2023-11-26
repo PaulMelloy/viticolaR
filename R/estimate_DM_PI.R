@@ -233,9 +233,18 @@ estimate_DM_PI <- function(w,
       }
 
       # calculate the zoospore survival
+      # I don't understand this function in the paper I think it might be wrong there
+      #  I have characterised it as it is described. a function that returns a number
+      #  greater than one when there are no longer consecutive hours of "wetness".
+      # Another this that bugs me is that the difference between "wetness" and
+      # "moisture" is not defined in the paper. This needs further research
+      # if the denominator is 0 an NA is returned, this should be a number greater
+      # than zero to show non-consecutive wet-hours
       SUZ <- w_c[indx >= ZRE_ind,
-                 cumsum(indx - ZRE_ind) /
-                           cumsum(shift(M_h, n = 1, type = "lead"))]
+                 (indx - ZRE_ind) /
+                          fifelse(cumsum(shift(M_h, n = 1, type = "lead")) == 0,
+                                  0.2,
+                                  cumsum(shift(M_h, n = 1, type = "lead")))]
       w_c[indx >= ZRE_ind,
           SUZ_h := SUZ]
 
