@@ -53,11 +53,12 @@ estimate_DM_PI <- function(w,
   #  MMO = SOD.
   MMO <- SOD
 
-
+  if("Date" %in% class(Start)) Start <- as.POSIXct(Start)
+  if("Date" %in% class(End)) End <- as.POSIXct(End)
 
   # set start time
   # this is 1st of January in northern hemisphere, and 1st of July in the south
-  if(Start == "detect"){
+  if(as.character(Start) == "detect"){
     season_yr <- fifelse(data.table::month(Sys.time()) < 7,
                          data.table::year(Sys.time()) -1,
                          data.table::year(Sys.time()))
@@ -69,7 +70,7 @@ estimate_DM_PI <- function(w,
     }
   }
 
-  if(End == "detect"){
+  if(as.character(End) == "detect"){
     End <-
       data.table::fifelse(
         w[.N,times] < as.POSIXct(paste0(season_yr + 1,"-05-29 23:00:00"),tz = "UTC"),
