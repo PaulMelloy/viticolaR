@@ -80,6 +80,8 @@ estimate_DM_PI <- function(w,
   w <- w[times >= Start &
            times <= End]
 
+  if(nrow(w)== 0) stop("supplied weather data is outside 'Start' and 'End' dates")
+
   # reinitialise indx
   w[,indx := (1:.N)-1]
 
