@@ -1,7 +1,9 @@
 test_that("Testing phase of model", {
   # library(devtools)
   # library(epiphytoolR)
-  T1 <- estimate_DM_PI(w = nt_weather)
+  T1 <- estimate_DM_PI(w = nt_weather,
+                       Start = as.Date("2023-07-01"),
+                       End = as.Date("2023-08-30"))
 
   expect_type(T1, "list")
   expect_equal(length(T1),7)
@@ -57,7 +59,9 @@ test_that("Testing phase of model", {
 
 })
 
-T2 <- estimate_DM_PI(nt_weather)
+T2 <- estimate_DM_PI(nt_weather,
+                     Start = as.Date("2023-07-01"),
+                     End = as.Date("2023-08-30"))
 test_that("Indx and hours match",{
   expect_equal(T2$start_time,as.POSIXct("2023-07-01","UTC"))
   expect_equal(T2$w[,first(times)],as.POSIXct("2023-07-01","UTC"))
