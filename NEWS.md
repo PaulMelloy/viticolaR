@@ -1,3 +1,5 @@
+# viticolaR 0.0.4
+
 # viticolaR 0.0.3
  * init `dev` version  
 
