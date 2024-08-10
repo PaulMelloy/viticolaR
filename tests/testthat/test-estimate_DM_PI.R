@@ -2,34 +2,34 @@ test_that("Testing phase of model", {
   # library(devtools)
   # library(epiphytoolR)
   T1 <- estimate_DM_PI(w = nt_weather,
-                       Start = as.Date("2023-07-01"),
-                       End = as.Date("2023-08-30"))
+                       Start = as.POSIXct("2023-07-01"),
+                       End = as.POSIXct("2023-08-30"))
 
   expect_type(T1, "list")
   expect_equal(length(T1),7)
-  expect_equal(length(T1$cohort_list),20)
-  expect_equal(unlist(lapply(T1$cohort_list,"[[",1)), 1:20)
+  expect_equal(length(T1$cohort_list),18)
+  expect_equal(unlist(lapply(T1$cohort_list,"[[",1)), 1:18)
   expect_type(do.call("c",lapply(T1$cohort_list,"[[","GEO_h")),
                   "double") # POSIXct ???
   expect_type(do.call("c",lapply(T1$cohort_list,"[[","SUS_death_h")),
               "double") # POSIXct ???
   expect_equal(do.call("c",lapply(T1$cohort_list,"[[","GEO_h"))[1:2],
-              c(636,638))
+              c(646,648))
   expect_equal(do.call("c",lapply(T1$cohort_list,"[[","SUS_death_h"))[1:2],
-               c(711,713))
+               c(721,723))
   expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","ZRE_ind"))) == FALSE),
                17)
   expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","ZDI_ind")))),
-               17)
+               15)
   expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","ZIN_ind")))),
-               17)
+               15)
   expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","INC_h_lower")))),
-               17)
+               15)
   expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","INC_h_upper")))),
-               17)
+               15)
   # Might need a test here that leads to an infection
 
-  expect_equal(length(T1$time_hours),1455)
+  expect_equal(length(T1$time_hours),1441)
   expect_is(T1$time_hours[1],"POSIXct")
 
   expect_s3_class(T1$cohort_list[[1]]$w_c, "data.table")
@@ -52,9 +52,9 @@ test_that("Testing phase of model", {
   # }
 
 
-  expect_equal(T1$cohort_list[[9]]$GEO_h, 861)
-  expect_equal(T1$cohort_list[[9]]$INC_h_lower, 1082)
-  expect_equal(T1$cohort_list[[9]]$INC_h_upper, 1153)
+  expect_equal(T1$cohort_list[[9]]$GEO_h, 871)
+  expect_equal(T1$cohort_list[[9]]$INC_h_lower, 1092)
+  expect_equal(T1$cohort_list[[9]]$INC_h_upper, 1163)
 
 
 })
@@ -71,5 +71,28 @@ test_that("Indx and hours match",{
   expect_equal(T2$cohort_list[[10]]$w_c[,last(indx)],
                as.integer(difftime(last(T2$cohort_list[[10]]$w_c$times),
                                    as.POSIXct("2023-07-01","UTC"),units = "hours")))
+})
+
+
+test_that("we can plot a the output",{
+  str(T1)
+
+  dat1 <- T1$cohort_list[[1]]$w_c
+
+  ggplot(NULL, aes(times, GER))+
+    geom_line(data = T1$cohort_list[[1]]$w_c)+
+    geom_line(data = T1$cohort_list[[2]]$w_c)+
+    geom_line(data = T1$cohort_list[[3]]$w_c)+
+    geom_line(data = T1$cohort_list[[4]]$w_c)+
+    geom_line(data = T1$cohort_list[[5]]$w_c)+
+    geom_line(data = T1$cohort_list[[6]]$w_c)+
+    geom_line(data = T1$cohort_list[[7]]$w_c)+
+    geom_line(data = T1$cohort_list[[8]]$w_c)+
+    geom_line(data = T1$cohort_list[[9]]$w_c)
+
+
+  ggplot(NULL, aes(times, GER))+
+    lapply(T1$cohort_list,function(x){
+      geom_line(data = x$w_c, aes(colour = x$cohort))
 })
 
