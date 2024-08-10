@@ -8,18 +8,18 @@ Description: What the package does (one paragraph).
 License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Suggests: 
     knitr,
     rmarkdown,
     units,
-    ggplot2,
     testthat,
     devtools
 VignetteBuilder: knitr
 Imports: 
     data.table,
     epiphytoolR,
+    ggplot2,
     Rdpack
 Depends: 
     R (>= 2.10)

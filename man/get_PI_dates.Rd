@@ -24,6 +24,8 @@ data.table of dates each of the growth stages reach for each cohort
 Get primary infection dates
 }
 \examples{
-nt_mod <- estimate_DM_PI(nt_weather)
+nt_mod <- estimate_DM_PI(nt_weather,
+                       Start = as.Date("2023-07-01"),
+                       End = as.Date("2023-08-30"))
 get_PI_dates(nt_mod)
 }

@@ -27,7 +27,9 @@
 #' \insertAllCited{}
 #'
 #' @examples
-#' mod1 <- estimate_DM_PI(w = nt_weather)
+#' mod1 <- estimate_DM_PI(w = nt_weather,
+#'                        Start = as.Date("2023-07-01"),
+#'                        End = as.Date("2023-08-30"))
 estimate_DM_PI <- function(w,
                            Start = "detect",
                            End = "detect",
@@ -53,11 +55,12 @@ estimate_DM_PI <- function(w,
   #  MMO = SOD.
   MMO <- SOD
 
-
+  if("Date" %in% class(Start)) Start <- as.POSIXct(Start)
+  if("Date" %in% class(End)) End <- as.POSIXct(End)
 
   # set start time
   # this is 1st of January in northern hemisphere, and 1st of July in the south
-  if(Start == "detect"){
+  if(as.character(Start) == "detect"){
     season_yr <- fifelse(data.table::month(Sys.time()) < 7,
                          data.table::year(Sys.time()) -1,
                          data.table::year(Sys.time()))
@@ -69,7 +72,7 @@ estimate_DM_PI <- function(w,
     }
   }
 
-  if(End == "detect"){
+  if(as.character(End) == "detect"){
     End <-
       data.table::fifelse(
         w[.N,times] < as.POSIXct(paste0(season_yr + 1,"-05-29 23:00:00"),tz = "UTC"),
@@ -80,7 +83,8 @@ estimate_DM_PI <- function(w,
   w <- w[times >= Start &
            times <= End]
 
-  if(nrow(w)== 0) stop("supplied weather data is outside 'Start' and 'End' dates")
+  if(nrow(w)== 0) stop("supplied weather data is outside 'Start' and 'End' dates.
+                       'detect' is using ",Start, " & ",End)
 
   # reinitialise indx
   w[,indx := (1:.N)-1]

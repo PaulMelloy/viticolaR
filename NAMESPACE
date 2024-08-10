@@ -2,6 +2,8 @@
 
 export(calc_HT)
 export(estimate_DM_PI)
+export(geom_ribbon_viticolaR)
 export(get_PI_dates)
 import(data.table)
+import(ggplot2)
 importFrom(Rdpack,reprompt)
