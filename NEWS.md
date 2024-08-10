@@ -1,4 +1,6 @@
 # viticolaR 0.0.4
+ * Add ggplot geom layers for plotting  
+ * Example fixes in 'Start' and end 'times' which effect timing  
 
 # viticolaR 0.0.3
  * init `dev` version  
