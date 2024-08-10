@@ -3,7 +3,7 @@ test_that("Testing phase of model", {
   # library(epiphytoolR)
   T1 <- estimate_DM_PI(w = nt_weather,
                        Start = as.POSIXct("2023-07-01"),
-                       End = as.POSIXct("2023-08-30"))
+                       End = as.POSIXct("2023-08-29"))
 
   expect_type(T1, "list")
   expect_equal(length(T1),7)
@@ -29,7 +29,7 @@ test_that("Testing phase of model", {
                15)
   # Might need a test here that leads to an infection
 
-  expect_equal(length(T1$time_hours),1441)
+  expect_equal(length(T1$time_hours),1417)
   expect_is(T1$time_hours[1],"POSIXct")
 
   expect_s3_class(T1$cohort_list[[1]]$w_c, "data.table")
@@ -75,24 +75,12 @@ test_that("Indx and hours match",{
 
 
 test_that("we can plot a the output",{
-  str(T1)
 
-  dat1 <- T1$cohort_list[[1]]$w_c
-
-  ggplot(NULL, aes(times, GER))+
-    geom_line(data = T1$cohort_list[[1]]$w_c)+
-    geom_line(data = T1$cohort_list[[2]]$w_c)+
-    geom_line(data = T1$cohort_list[[3]]$w_c)+
-    geom_line(data = T1$cohort_list[[4]]$w_c)+
-    geom_line(data = T1$cohort_list[[5]]$w_c)+
-    geom_line(data = T1$cohort_list[[6]]$w_c)+
-    geom_line(data = T1$cohort_list[[7]]$w_c)+
-    geom_line(data = T1$cohort_list[[8]]$w_c)+
-    geom_line(data = T1$cohort_list[[9]]$w_c)
+  expect_no_condition(
+    ggplot2::ggplot()+
+      geom_ribbon_viticolaR(T2)
+  )
 
 
-  ggplot(NULL, aes(times, GER))+
-    lapply(T1$cohort_list,function(x){
-      geom_line(data = x$w_c, aes(colour = x$cohort))
 })
 
