@@ -34,7 +34,9 @@ leaves from overwintering oospores as described by
 \insertRef{rossi_mechanistic_2008}{viticolaR}
 }
 \examples{
-mod1 <- estimate_DM_PI(w = nt_weather)
+mod1 <- estimate_DM_PI(w = nt_weather,
+                       Start = as.Date("2023-07-01"),
+                       End = as.Date("2023-08-30"))
 }
 \references{
 \insertAllCited{}

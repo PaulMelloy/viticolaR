@@ -27,7 +27,9 @@
 #' \insertAllCited{}
 #'
 #' @examples
-#' mod1 <- estimate_DM_PI(w = nt_weather)
+#' mod1 <- estimate_DM_PI(w = nt_weather,
+#'                        Start = as.Date("2023-07-01"),
+#'                        End = as.Date("2023-08-30"))
 estimate_DM_PI <- function(w,
                            Start = "detect",
                            End = "detect",
@@ -81,7 +83,8 @@ estimate_DM_PI <- function(w,
   w <- w[times >= Start &
            times <= End]
 
-  if(nrow(w)== 0) stop("supplied weather data is outside 'Start' and 'End' dates")
+  if(nrow(w)== 0) stop("supplied weather data is outside 'Start' and 'End' dates.
+                       'detect' is using ",Start, " & ",End)
 
   # reinitialise indx
   w[,indx := (1:.N)-1]
