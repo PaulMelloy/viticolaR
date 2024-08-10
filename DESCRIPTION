@@ -13,13 +13,13 @@ Suggests:
     knitr,
     rmarkdown,
     units,
-    ggplot2,
     testthat,
     devtools
 VignetteBuilder: knitr
 Imports: 
     data.table,
     epiphytoolR,
+    ggplot2,
     Rdpack
 Depends: 
     R (>= 2.10)
