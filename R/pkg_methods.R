@@ -1,42 +1,51 @@
 #' Plot viticolaR model
 #'
+#' @usage geom_ribbon_viticolaR(mod, y = "GER", x_subset = "ZooWindow",...)
+#' @aliases geom_line_viticolaR(mod, y = "GER", ...)
 #' @param mod m_viticola class object, output of function estimate_DM_PI
 #' @param y character, An output state variable from the estimate_DM_PI, defaults
 #'  to "GER" other options include "PMO", "GEO", "SUZ_h".
+#' @param x_subset a column heading in w_c of the cohort list with a logical class
+#'  This will subset the ribbon.
 #' @param ... other arguments to be passed to geom_line
 #'
 #' @return ggplot
 #' @export
 #'
-#' @examples
 #' @import ggplot2
+#' @examples
 #' v_mod <- estimate_DM_PI(w = nt_weather,
 #'                         Start = as.POSIXct("2023-07-01"),
 #'                         End = as.POSIXct("2023-08-30"))
-#' ggplot() +
-#'    geom_viticolaR(v_mod)
+#' ggplot2::ggplot() +
+#'    geom_ribbon_viticolaR(v_mod)
 geom_ribbon_viticolaR <- function(mod,
                      y = "GER",
                      x_subset = "ZooWindow",
-                     pallet_set = "Set1",...){
+                     ...){
+  times <- NULL
 
       lapply(mod$cohort_list,function(x){
-      geom_ribbon(data = x$w_c[get(x_subset) == TRUE],
-                  aes(x = times,
-                      ymin = 0,
-                      ymax = get(y),
-                      fill = x$cohort),...)
+      ggplot2::geom_ribbon(
+        data = x$w_c[get(x_subset) == TRUE],
+        ggplot2::aes(x = times,
+        ymin = 0,
+        ymax = get(y),
+        fill = x$cohort),...)
       })
-  }
+}
+
 geom_line_viticolaR <- function(mod,
                                   y = "GER",
-                                  x_subset = "ZooWindow",
-                                  pallet_set = "Set1",...){
+                                  ...){
+  times <- NULL
+
       lapply(mod$cohort_list,function(x){
-      geom_line(data = x$w_c,
-                aes(x = times,
-                    y = get(y),
-                    colour = x$cohort),...)
+        ggplot2::geom_line(
+          data = x$w_c,
+          ggplot2::aes(x = times,
+          y = get(y),
+          colour = x$cohort),...)
 
         })
   }
