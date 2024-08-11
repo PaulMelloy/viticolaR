@@ -1,4 +1,4 @@
-#' Plot viticolaR model
+#' Plot ribbon viticolaR model
 #'
 #' @usage geom_ribbon_viticolaR(mod, y = "GER", x_subset = "ZooWindow",...)
 #' @aliases geom_line_viticolaR(mod, y = "GER", ...)
@@ -35,6 +35,22 @@ geom_ribbon_viticolaR <- function(mod,
       })
 }
 
+#' Plot line viticolaR model
+#'
+#' @param mod m_viticola class object, output of function estimate_DM_PI
+#' @param y character, An output state variable from the estimate_DM_PI, defaults
+#'  to "GER" other options include "PMO", "GEO", "SUZ_h".
+#' @param ... other arguments to be passed to geom_line
+#'
+#' @return ggplot layer
+#' @export
+#'
+#' @examples
+#' v_mod <- estimate_DM_PI(w = nt_weather,
+#'                         Start = as.POSIXct("2023-07-01"),
+#'                         End = as.POSIXct("2023-08-30"))
+#' ggplot2::ggplot() +
+#'    geom_line_viticolaR(v_mod)
 geom_line_viticolaR <- function(mod,
                                   y = "GER",
                                   ...){
