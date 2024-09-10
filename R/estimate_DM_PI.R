@@ -70,6 +70,8 @@ estimate_DM_PI <- function(w,
     }else{
       Start <- w$times[1]
     }
+  }else{
+    season_yr <- data.table::year(Start)
   }
 
   if(as.character(End) == "detect"){
