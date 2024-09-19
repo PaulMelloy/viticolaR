@@ -1,10 +1,15 @@
 Package: viticolaR
-Title: What the Package Does (One Line, Title Case)
+Title: Model Plasmopara viticola primary inoculum dispersals  
 Version: 0.0.4
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+    person(given = "Paul",
+           family = "Melloy",
+           role = c("aut", "cre"),
+           email = "Paul.Melloy@csiro.au",
+           comment = c(ORCID = "0000-0003-4253-7167")
+Description: Translated code from published manuscript "A mechanistic model 
+    simulating primary infections of downy mildew in grapevine"" Rossi et al. 
+    (2008)
 License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

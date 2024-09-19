@@ -67,3 +67,40 @@ geom_line_viticolaR <- function(mod,
   }
 # list(scale_fill_gradient(low = "#7e3802", high = "#fcfec8"),
 #      ylim(0, 1.2)))
+
+#' Plot viticolR weather
+#'
+#' @param mod model output from `estimate_DM_PI()` with class 'm_viticola'
+#'
+#' @return plot
+#' @export
+#'
+#' @examples
+plot_weather <- function(mod, rolling_window){
+  if(isFALSE(inherits(mod,what = "m_viticola"))) stop("'mod' is not class 'm_viticola'.
+                                                        Please use an output of 'estimate_DM_PI()'")
+  w_dat <- mod$w
+
+  factr <- floor(nrow(w_dat)/rolling_window)
+  f_group <- c(rep(1:factr,each = rolling_window),rep(factr+1,nrow(w_dat) %% rolling_window))
+
+  w_dat[,time_factor := f_group]
+  w_agg <- w_dat[,list(times = median(times),
+                         temp = mean(temp),
+                       rh = mean(rh),
+                       rain = sum(rain,na.rm = TRUE)), by = f_group]
+
+  w_agg |>
+    ggplot(aes(x = times))+
+    geom_line(aes(y = temp),colour = "darkred")+
+    geom_col(aes(y = rain),
+                # method = "glm",
+                # formula = y ~ poly(x,20),
+                colour = "lightblue")+
+    ylab("Temperature C and rainfall (mm)")+
+    geom_line(aes(y = rh/4),colour = "darkblue",linetype = "dotdash")+
+    scale_y_continuous(sec.axis = sec_axis(transform = ~./0.25,name = "Relative Humidity %"))+
+    theme_minimal()+
+    ggtitle(paste(unique(mod$w$station), "weather observations"))
+}
+
