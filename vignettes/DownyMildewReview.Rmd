@@ -129,3 +129,21 @@ Let's plot this to see if it is suitable
 #   geom_raster()
 ```
 
+
+
+```{r}
+merge_axf_weather(File_compressed = paste0("~/weather_data/tgz/240915_0946_IDQ60910.tgz"),
+                  File_axf = "IDQ60910.99123.axf",
+                  File_formatted = "23-24_NTamborine.csv",
+                  base_dir = weather_path,verbose = TRUE
+)
+
+class(ntw$aifstime_utc)
+ntw[,aifstime_utc := as.character(aifstime_utc)]
+ntw[,aifstime_local := as.character(aifstime_local)]
+
+fwrite(ntw, "/home/pmelloy/weather_data/23-24_NTamborine.csv")
+fread("/home/pmelloy/weather_data/23-24_NTamborine.csv",integer64 = "character")
+
+```
+
