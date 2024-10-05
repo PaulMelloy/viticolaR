@@ -190,7 +190,9 @@ estimate_DM_PI <- function(w,
                 "SUZ_h",
                 "ZRE_h",
                 "INC_h",
-                "ZDI_h") := list(NA_real_,0,FALSE,FALSE,NA_real_,FALSE,FALSE,FALSE)]
+                "ZDI_h",
+                "INF_h") := list(NA_real_,0,FALSE,FALSE,NA_real_,
+                                 FALSE,FALSE,FALSE, FALSE)]
         return(list(cohort = oo_cohort,
                     w_c = w_c,
                     GEO_h = NA_integer_,
@@ -243,7 +245,9 @@ estimate_DM_PI <- function(w,
       if(length(ZRE_ind) == 0){
         w_c[, c("ZRE_h",
                 "INC_h",
-                "ZDI_h") := list(FALSE,FALSE,FALSE)]
+                "ZDI_h",
+                "INF_h"
+        ) := list(FALSE,FALSE,FALSE,FALSE)]
        return(list(cohort = oo_cohort,
                    w_c = w_c,
                    GEO_h = GER_c_h,
@@ -291,7 +295,9 @@ estimate_DM_PI <- function(w,
       # if zoospores don't survive return NA
       if(length(ZDI_ind) == 0){
         w_c[, c("ZDI_h",
-                "INC_h") := list(FALSE,FALSE)]
+                "INC_h",
+                "INF_h"
+                ) := list(FALSE,FALSE,FALSE)]
         return(list(cohort = oo_cohort,
                     w_c = w_c,
                     GEO_h = GER_c_h,
@@ -320,7 +326,8 @@ estimate_DM_PI <- function(w,
       ## EXIT if ...
       #  zoospores don't infect return NA
       if(length(zoo_infection_ind) == 0){
-        w_c[, c("INC_h") := list(FALSE)]
+        w_c[, c("INC_h",
+                "INF_h") := list(FALSE,FALSE)]
         return(list(cohort = oo_cohort,
                     w_c = w_c,
                     GEO_h = GER_c_h,
