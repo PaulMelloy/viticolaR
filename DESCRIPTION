@@ -8,8 +8,8 @@ Authors@R:
            email = "Paul.Melloy@csiro.au",
            comment = c(ORCID = "0000-0003-4253-7167"))
 Description: Translated code from published manuscript "A mechanistic model 
-    simulating primary infections of downy mildew in grapevine"" Rossi et al. 
-    (2008)
+    simulating primary infections of downy mildew in grapevine" Rossi et al. 
+    (2008).
 License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
