@@ -15,12 +15,16 @@ geom_ribbon_viticolaR(mod, y = "GER", x_subset = "ZooWindow",...)
 \item{mod}{m_viticola class object, output of function estimate_DM_PI}
 
 \item{y}{character, An output state variable from the estimate_DM_PI, defaults
-to "GER" other options include "PMO", "GEO", "SUZ_h".}
+to "GER" (germinating oospores), other options include "PMO" (Physiological
+mature oospores), "GEO" (Germinated oospores), "SUS_h" (survival of sporangia),
+"SUZ_h" (Survival of zoospores).}
 
 \item{x_subset}{a column heading in w_c of the cohort list with a logical class
-This will subset the ribbon.}
+This will subset the ribbon, options include "ZRE_h" (Zoospore release),
+"ZDI_h" (Zoospore dispersal hours), "REL" and "ZooWindow" (zoospores on
+leaves).}
 
-\item{...}{other arguments to be passed to geom_line}
+\item{...}{other arguments to be passed to geom_ribbon}
 }
 \value{
 ggplot
@@ -34,4 +38,9 @@ v_mod <- estimate_DM_PI(w = nt_weather,
                         End = as.POSIXct("2023-08-30"))
 ggplot2::ggplot() +
    geom_ribbon_viticolaR(v_mod)
+
+ggplot2::ggplot() +
+   geom_ribbon_viticolaR(v_mod,
+                         y = "SUZ_h",
+                         x_subset = "ZRE_h")
 }

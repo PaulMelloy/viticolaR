@@ -27,6 +27,22 @@ in the northern hemisphere. Also refered to as 'morphologically mature oospores
 \value{
 list, class == m_viticola, containing the model output and downy mildew
 primary infection progress.
+\tabular{rl}{
+\strong{start_time}: \tab Time in POSIXct format with "UTC" time-zone\cr
+\strong{time_hours}: \tab vector of timesteps the model ran \cr
+\strong{Hyd_t}: \tab vector of hydrothermal time corresponding to each time_hours \cr
+\strong{PMO}: \tab vector of physiological mature oospores at each time step \cr
+\strong{cohorts}: \tab total number of oospore cohorts which germinated as a result
+of weather conditions meeting the threshold\cr
+\strong{w}: \tab weather data.table of class \code{epiphy.weather} used in the model \cr
+\strong{cohort_list}: \tab List of model outputs for each cohort \cr
+\strong{lat}: \tab Station latitude in decimal degrees \cr
+\strong{station}: \tab Unique station identifying name \cr
+\strong{YYYY}: \tab Year \cr
+\strong{MM}: \tab Month \cr
+\strong{DD}: \tab Day \cr
+\strong{hh}: \tab Hour \cr
+\strong{mm}: \tab Minute \cr}
 }
 \description{
 Umbrella function to calculate the number of primary infections on grapevine
