@@ -4,10 +4,11 @@
 #' @aliases geom_line_viticolaR(mod, y = "GER", ...)
 #' @param mod m_viticola class object, output of function estimate_DM_PI
 #' @param y character, An output state variable from the estimate_DM_PI, defaults
-#'  to "GER" other options include "PMO", "GEO", "SUZ_h".
+#'  to "GER" other options include "PMO", "GEO", "SUS_h","SUZ_h".
 #' @param x_subset a column heading in w_c of the cohort list with a logical class
-#'  This will subset the ribbon.
-#' @param ... other arguments to be passed to geom_line
+#'  This will subset the ribbon, options include "ZRE_h", "ZDI_h", "REL" and
+#'  "ZooWindow".
+#' @param ... other arguments to be passed to geom_ribbon
 #'
 #' @return ggplot
 #' @export
@@ -19,6 +20,11 @@
 #'                         End = as.POSIXct("2023-08-30"))
 #' ggplot2::ggplot() +
 #'    geom_ribbon_viticolaR(v_mod)
+#'
+#' ggplot2::ggplot() +
+#'    geom_ribbon_viticolaR(v_mod,
+#'                          y = SUZ_h,
+#'                          x_subset = "ZRE_h)
 geom_ribbon_viticolaR <- function(mod,
                      y = "GER",
                      x_subset = "ZooWindow",
@@ -81,6 +87,9 @@ geom_line_viticolaR <- function(mod,
 #'                         End = as.POSIXct("2023-08-30"))
 #' plot_weather(v_mod)
 plot_weather <- function(mod, rolling_window = 4){
+  # conciliate missing globals
+  time_factor <- times <- temp <- rh <- rain <- NULL
+
   if(isFALSE(inherits(mod,what = "m_viticola"))) stop("'mod' is not class 'm_viticola'.
                                                         Please use an output of 'estimate_DM_PI()'")
   w_dat <- mod$w
@@ -89,7 +98,7 @@ plot_weather <- function(mod, rolling_window = 4){
   f_group <- c(rep(1:factr,each = rolling_window),rep(factr+1,nrow(w_dat) %% rolling_window))
 
   w_dat[,time_factor := f_group]
-  w_agg <- w_dat[,list(times = median(times),
+  w_agg <- w_dat[,list(times = stats::median(times),
                          temp = mean(temp),
                        rh = mean(rh),
                        rain = sum(rain,na.rm = TRUE)), by = f_group]
