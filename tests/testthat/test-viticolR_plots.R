@@ -6,12 +6,21 @@ ntw <- estimate_DM_PI(
 )
 
 test_that("geom_ribbon works",{
-  p1 <-
+  p1g <-
     ggplot2::ggplot() +
-    geom_ribbon_viticolaR(ntw)
+    geom_ribbon_viticolaR(ntw,,y = "GER")
 
   expect_s3_class(p1, "ggplot")
   expect_s3_class(p1, "gg")
+
+  p1p <-
+    ggplot2::ggplot() +
+    geom_ribbon_viticolaR(ntw,y = "PMO")
+  p12g <-
+    ggplot2::ggplot() +
+    geom_ribbon_viticolaR(ntw,y = "GEO")
+
+
 })
 
 test_that("plot weather works",{
