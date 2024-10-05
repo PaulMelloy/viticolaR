@@ -76,7 +76,11 @@ geom_line_viticolaR <- function(mod,
 #' @export
 #'
 #' @examples
-plot_weather <- function(mod, rolling_window){
+#' v_mod <- estimate_DM_PI(w = nt_weather,
+#'                         Start = as.POSIXct("2023-07-01"),
+#'                         End = as.POSIXct("2023-08-30"))
+#' plot_weather(v_mod)
+plot_weather <- function(mod, rolling_window = 4){
   if(isFALSE(inherits(mod,what = "m_viticola"))) stop("'mod' is not class 'm_viticola'.
                                                         Please use an output of 'estimate_DM_PI()'")
   w_dat <- mod$w
