@@ -20,6 +20,22 @@
 #'
 #' @return list, class == m_viticola, containing the model output and downy mildew
 #'  primary infection progress.
+#'  \tabular{rl}{
+#'   **start_time**: \tab Time in POSIXct format with "UTC" time-zone\cr
+#'   **time_hours**: \tab vector of timesteps the model ran \cr
+#'   **Hyd_t**: \tab vector of hydrothermal time corresponding to each time_hours \cr
+#'   **PMO**: \tab vector of physiological mature oospores at each time step \cr
+#'   **cohorts**: \tab total number of oospore cohorts which germinated as a result
+#'    of weather conditions meeting the threshold\cr
+#'   **w**: \tab weather data.table of class `epiphy.weather` used in the model \cr
+#'   **cohort_list**: \tab List of model outputs for each cohort \cr
+#'   **lat**: \tab Station latitude in decimal degrees \cr
+#'   **station**: \tab Unique station identifying name \cr
+#'   **YYYY**: \tab Year \cr
+#'   **MM**: \tab Month \cr
+#'   **DD**: \tab Day \cr
+#'   **hh**: \tab Hour \cr
+#'   **mm**: \tab Minute \cr}
 #' @export
 #' @import data.table
 #' @importFrom Rdpack reprompt
@@ -151,7 +167,7 @@ estimate_DM_PI <- function(w,
                         vpd = w[which(oo_cohort == J_cohort)[1]:.N, vpd],
                         M_h = w[which(oo_cohort == J_cohort)[1]:.N, M_h],
                         PMO = w[which(oo_cohort == J_cohort)[1]:.N, PMO],
-                        J_c = w[(which(oo_cohort == J_cohort)[1]):.N, J_cohort])
+                        J_c = w[which(oo_cohort == J_cohort)[1]:.N, J_cohort])
 
       # get first hour in cohort
       #  This is also when sporangia start germinating from oospores in leaf litter
@@ -168,12 +184,13 @@ estimate_DM_PI <- function(w,
       # if germination has not occured yet for cohort return NAs
       if(any(w_c$GER >= 1)== FALSE){
         w_c[, c("SUS_h",
+                "GEO",
                 "ZooWindow",
                 "REL",
                 "SUZ_h",
                 "ZRE_h",
                 "INC_h",
-                "ZDI_h") := list(NA,FALSE,FALSE,NA_real_,FALSE,FALSE,FALSE)]
+                "ZDI_h") := list(NA_real_,0,FALSE,FALSE,NA_real_,FALSE,FALSE,FALSE)]
         return(list(cohort = oo_cohort,
                     w_c = w_c,
                     GEO_h = NA_integer_,
