@@ -91,13 +91,29 @@ geom_line_viticolaR <- function(mod,
 #'                         Start = as.POSIXct("2023-07-01"),
 #'                         End = as.POSIXct("2023-08-30"))
 #' plot_weather(v_mod)
-plot_weather <- function(mod, rolling_window = 4){
+plot_weather <- function(mod,
+                         rolling_window = 4,
+                         date_min,
+                         date_max){
   # conciliate missing globals
   time_factor <- times <- temp <- rh <- rain <- NULL
 
   if(isFALSE(inherits(mod,what = "m_viticola"))) stop("'mod' is not class 'm_viticola'.
                                                         Please use an output of 'estimate_DM_PI()'")
-  w_dat <- mod$w
+  if(missing(date_min)){
+    if(missing(date_max)){
+      w_dat <- mod$w
+      }else{
+        w_dat <- mod$w[times <= as.POSIXct(date_max)]
+      }
+  }else{
+    if(missing(date_max)){
+      w_dat <- mod$w[times >= as.POSIXct(date_min)]
+    }else{
+      w_dat <- mod$w[times >= as.POSIXct(date_min) &
+                       times <= as.POSIXct(date_max),]
+  }
+
 
   # get number of groups to summarise
   factr <- floor(nrow(w_dat)/rolling_window)
