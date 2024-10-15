@@ -82,6 +82,8 @@ geom_line_viticolaR <- function(mod,
 #' @param mod model output from `estimate_DM_PI()` with class 'm_viticola'
 #' @param rolling_window summarise hourly weather data into rolling average
 #'  (temperature and relative humidity), cumulative rainfall and median `times`
+#' @param date_min as.posix date minimum for x-axis of plot
+#' @param date_max as.posix date maximum for x-axis of plot
 #'
 #' @return ggplot of weather
 #' @export
@@ -112,7 +114,7 @@ plot_weather <- function(mod,
     }else{
       w_dat <- mod$w[times >= as.POSIXct(date_min) &
                        times <= as.POSIXct(date_max),]
-  }
+  }}
 
 
   # get number of groups to summarise
