@@ -1,27 +1,37 @@
 Package: viticolaR
-Title: What the Package Does (One Line, Title Case)
+Title: Mechanistic Model To Simulate Downy Mildew Primary Infections In Grapevines
 Version: 0.0.3
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+    person(given = "Paul",
+           family = "Melloy",
+           role = c("aut", "cre", "trl","cph"),
+           email = "paul@melloy.com.au",
+           comment = c(ORCID = "0000-0003-4253-7167",
+                       "Translated equations from literature and developed package."))
+Description: Mechanistic model which estimates Downy Mildew (Plasmopara viticola)
+ primary inoculum production, dispersal from overwintering inoculum. The model 
+ also estimates the infection process of the dispersed zoospores. Model translated
+ from the scientific literature, Rossi et al. 2008, Ecological Modelling, 212, 
+ 480-491.
 License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Suggests: 
     knitr,
     rmarkdown,
     units,
     ggplot2,
     testthat,
-    devtools
+    devtools,
+    spelling
 VignetteBuilder: knitr
 Imports: 
     data.table,
     epiphytoolR,
     Rdpack
 Depends: 
-    R (>= 2.10)
+    R (>= 4.0.1)
 LazyData: true
 RdMacros: Rdpack 
+Language: en-US
