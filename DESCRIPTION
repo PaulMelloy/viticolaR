@@ -12,7 +12,7 @@ Description: Mechanistic model which estimates Downy Mildew (Plasmopara viticola
  primary inoculum production, dispersal from overwintering inoculum. The model 
  also estimates the infection process of the dispersed zoospores. Model translated
  from the scientific literature, Rossi et al. 2008, Ecological Modelling, 212, 
- 480-491.
+ p480-491.
 License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
