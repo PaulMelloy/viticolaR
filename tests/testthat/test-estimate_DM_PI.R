@@ -1,9 +1,7 @@
 test_that("Testing phase of model", {
-  # library(devtools)
-  # library(epiphytoolR)
   T1 <- estimate_DM_PI(w = nt_weather,
-                       Start = as.POSIXct("2023-07-01"),
-                       End = as.POSIXct("2023-08-29"))
+                       Start = "2023-07-01",
+                       End = "2023-08-30")
 
   expect_type(T1, "list")
   expect_equal(length(T1),7)
@@ -29,7 +27,7 @@ test_that("Testing phase of model", {
                15)
   # Might need a test here that leads to an infection
 
-  expect_equal(length(T1$time_hours),1417)
+  expect_equal(length(T1$time_hours),1441)
   expect_is(T1$time_hours[1],"POSIXct")
 
   expect_s3_class(T1$cohort_list[[1]]$w_c, "data.table")
@@ -45,8 +43,8 @@ test_that("Testing phase of model", {
   expect_false(inf_progress(1)[1] == inf_progress(1)[2])
   expect_true(inf_progress(1)[1] < inf_progress(1)[2])
 
-  # slowly print each cohort outcomes
-  # for(i in 1:20){
+#  slowly print each cohort outcomes
+  # for(i in 1:18){
   #   print(inf_progress(i))
   #   Sys.sleep(1)
   # }
@@ -60,8 +58,8 @@ test_that("Testing phase of model", {
 })
 
 T2 <- estimate_DM_PI(nt_weather,
-                     Start = as.Date("2023-07-01"),
-                     End = as.Date("2023-08-30"))
+                     Start = "2023-07-01",
+                     End = "2023-08-30")
 test_that("Indx and hours match",{
   expect_equal(T2$start_time,as.POSIXct("2023-07-01","UTC"))
   expect_equal(T2$w[,first(times)],as.POSIXct("2023-07-01","UTC"))
@@ -73,6 +71,18 @@ test_that("Indx and hours match",{
                                    as.POSIXct("2023-07-01","UTC"),units = "hours")))
 })
 
+test_that("list element classes are expected",{
+  # check character dates are accepted
+  Tmod <- estimate_DM_PI(w = nt_weather,
+                         Start = "2023-07-01",
+                         End = "2023-08-29")
+
+  expect_s3_class(Tmod$start_time, "POSIXct")
+  expect_true(format(Tmod$start_time, format = "%Z") == "UTC")
+  expect_s3_class(Tmod$time_hours, "POSIXct")
+  expect_true(unique(format(Tmod$time_hours, format = "%Z")) == "UTC")
+
+  })
 
 test_that("we can plot a the output",{
 

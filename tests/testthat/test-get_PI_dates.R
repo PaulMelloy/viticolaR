@@ -1,7 +1,7 @@
 test_that("Conveniance function returns expected", {
   Tmod <- estimate_DM_PI(w = nt_weather,
-                         Start = as.Date("2023-07-01"),
-                         End = as.Date("2023-08-29"))
+                         Start = "detect",
+                         End = "detect")
 
   T1 <- get_PI_dates(mod = Tmod)
 
@@ -10,6 +10,11 @@ test_that("Conveniance function returns expected", {
   expect_type(T1$cohort,"integer")
   expect_s3_class(T1$primary_infection_stage,"factor") # factor
   expect_s3_class(T1$hour,"POSIXct") # POSIXct
+
+
+
+  T2 <- get_PI_dates(mod = Tmod)
+
 
   # library(ggplot2)
   # T1[primary_infection_stage != "SUS_death_h" &

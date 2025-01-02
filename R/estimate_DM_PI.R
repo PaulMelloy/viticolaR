@@ -7,7 +7,7 @@
 #' @param w hourly weather data.table, class epiphy.weather.
 #' @param SOD Proportion of seasonal oospores dose. This starts as 1 in the middle
 #'  of winter, the first of June for the southern hemisphere or the 1st of January
-#'  in the northern hemisphere. Also refered to as 'morphologically mature oospores
+#'  in the northern hemisphere. Also referred to as 'morphologically mature oospores
 #'  (MMO).
 #' @param Start POSIXct, date time in UTC when to start the model running. By default
 #'  the function will 'detect' the start of the model. This model is configured
@@ -77,9 +77,11 @@ estimate_DM_PI <- function(w,
   # set start time
   # this is 1st of January in northern hemisphere, and 1st of July in the south
   if(as.character(Start) == "detect"){
-    season_yr <- fifelse(data.table::month(Sys.time()) < 7,
-                         data.table::year(Sys.time()) -1,
-                         data.table::year(Sys.time()))
+    season_yr <- detect_season(w)
+
+    current_yr <- fifelse(data.table::month(Sys.time()) < 7,
+                          data.table::year(Sys.time()) -1,
+                          data.table::year(Sys.time()))
 
     if(w$times[1] < as.POSIXct(paste0(season_yr,"-07-01 00:00:00"),tz = "UTC")){
       Start <- as.POSIXct(paste0(season_yr,"-07-01 00:00:00"),tz = "UTC")
@@ -87,7 +89,9 @@ estimate_DM_PI <- function(w,
       Start <- w$times[1]
     }
   }else{
-    season_yr <- data.table::year(Start)
+    if(is.character(Start)){
+      Start <- as.POSIXct(Start, tz = "UTC")
+      }
   }
 
   if(as.character(End) == "detect"){
@@ -96,7 +100,12 @@ estimate_DM_PI <- function(w,
         w[.N,times] < as.POSIXct(paste0(season_yr + 1,"-05-29 23:00:00"),tz = "UTC"),
               w[.N,times],
               as.POSIXct(paste0(season_yr + 1,"-05-29 23:00:00"),tz = "UTC"))
+  }else{
+    if(is.character(End)){
+      End <- as.POSIXct(End, tz = "UTC")
+      }
   }
+
   # select weather data
   w <- w[times >= Start &
            times <= End]
@@ -230,7 +239,7 @@ estimate_DM_PI <- function(w,
           REL := zsp_release(WD_h = cumsum(M_h),
                              TWD_h = cumsum(temp)/seq_along(temp))]
 
-      # Germinated oospores making up the surviving germinated oopspores from cohort
+      # Germinated oospores making up the surviving germinated oospores from cohort
       # w_c[, GEO_h := fifelse(GER >=1, GEO_c, PMO_c)]
       # w_c[, GEO_h := fifelse(SUS_h > 1, 0, GEO_h)]
       # GEO <- w_c[J_c == oo_cohort, last(GEO_h)]
@@ -278,7 +287,7 @@ estimate_DM_PI <- function(w,
           SUZ_h := SUZ]
 
       # Determine zoospore release
-      ## ZRE_h is the number of zoospores relseased at hour _h
+      ## ZRE_h is the number of zoospores released at hour _h
       w_c[,ZRE_h := fifelse(SUZ_h <= 1 &
                               SUZ_h >= 0,
                            TRUE, FALSE)]
@@ -288,7 +297,7 @@ estimate_DM_PI <- function(w,
                            TRUE,
                            FALSE)]
 
-      # is equivalent to lowercase greek delta (ZDI_delta)
+      # is equivalent to lower-case greek delta (ZDI_delta)
       ZDI_ind <- w_c[ZDI_h == TRUE,first(indx)]
 
       ## EXIT if ...
