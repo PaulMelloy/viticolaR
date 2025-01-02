@@ -12,9 +12,9 @@ test_that("Testing phase of model", {
   expect_type(do.call("c",lapply(T1$cohort_list,"[[","SUS_death_h")),
               "double") # POSIXct ???
   expect_equal(do.call("c",lapply(T1$cohort_list,"[[","GEO_h"))[1:2],
-              c(636,638))
+              c(646,648))
   expect_equal(do.call("c",lapply(T1$cohort_list,"[[","SUS_death_h"))[1:2],
-               c(711,713))
+               c(721,723))
   expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","ZRE_ind"))) == FALSE),
                17)
   expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","ZDI_ind")))),
@@ -50,9 +50,9 @@ test_that("Testing phase of model", {
   # }
 
 
-  expect_equal(T1$cohort_list[[9]]$GEO_h, 861)
-  expect_equal(T1$cohort_list[[9]]$INC_h_lower, 1082)
-  expect_equal(T1$cohort_list[[9]]$INC_h_upper, 1153)
+  expect_equal(T1$cohort_list[[9]]$GEO_h, 871)
+  expect_equal(T1$cohort_list[[9]]$INC_h_lower, 1092)
+  expect_equal(T1$cohort_list[[9]]$INC_h_upper, 1163)
 
 
 })
@@ -83,3 +83,14 @@ test_that("list element classes are expected",{
   expect_true(unique(format(Tmod$time_hours, format = "%Z")) == "UTC")
 
   })
+
+test_that("we can plot a the output",{
+
+  expect_no_condition(
+    ggplot2::ggplot()+
+      geom_ribbon_viticolaR(T2)
+  )
+
+
+})
+

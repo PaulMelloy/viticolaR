@@ -1,6 +1,12 @@
+# viticolaR 0.0.4
+ * Add ggplot geom layers for plotting  
+ * New feature - plot_weather()  
+ * Example fixes in 'Start' and end 'times' which effect timing  
+
 # viticolaR 0.0.3
   - Add spelling package to suggests  
   - Corrected unit tests
+ * init `dev` version  
 
 # viticolaR 0.0.2
   - correct indexing and hours bug to provide accurate date times  

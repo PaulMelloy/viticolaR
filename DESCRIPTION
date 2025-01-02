@@ -21,7 +21,6 @@ Suggests:
     knitr,
     rmarkdown,
     units,
-    ggplot2,
     testthat,
     devtools,
     spelling
@@ -29,6 +28,7 @@ VignetteBuilder: knitr
 Imports: 
     data.table,
     epiphytoolR,
+    ggplot2,
     Rdpack
 Depends: 
     R (>= 4.0.1)
