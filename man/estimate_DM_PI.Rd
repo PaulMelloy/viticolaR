@@ -21,7 +21,7 @@ the first season year of the input weather data 'w'.}
 
 \item{SOD}{Proportion of seasonal oospores dose. This starts as 1 in the middle
 of winter, the first of June for the southern hemisphere or the 1st of January
-in the northern hemisphere. Also refered to as 'morphologically mature oospores
+in the northern hemisphere. Also referred to as 'morphologically mature oospores
 (MMO).}
 }
 \value{

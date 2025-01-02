@@ -1,7 +1,8 @@
 # viticolaR
 A mechanistic compartment model to assist in fungicide decision support for 
-downy mildew (_Plasmodia viticola_) infections in grapevines.
-This model is translated and adapted from [A mechanistic model simulating primary infections of downy mildew in grapevine](https://www.sciencedirect.com/science/article/pii/S0304380007005881)
+downy mildew (*Plasmodia viticola*) infections in grapevines.
+This model is translated and adapted from 
+[A mechanistic model simulating primary infections of downy mildew in grapevine](https://www.sciencedirect.com/science/article/pii/S0304380007005881)
 by Vittorio Rossi, Tito Caffi, Simona Giosue and Riccardo Bugiani. 
 This paper was first published in Ecological Modelling in **2008**.
 

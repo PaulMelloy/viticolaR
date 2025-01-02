@@ -1,8 +1,8 @@
-#' Calculate the cohort size of phyiologically mature oospores
+#' Calculate the cohort size of physiologically mature oospores
 #'
 #' @param j rain event number triggering oospore germination
-#' @param epslon hour at which the germination is triggared
-#' @param DOR_h rate at which oospores matiure at hour h
+#' @param epslon hour at which the germination is triggered
+#' @param DOR_h rate at which oospores mature at hour h
 #'
 #' @return the PMO
 #'
