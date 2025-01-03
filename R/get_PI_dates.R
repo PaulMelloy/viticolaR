@@ -65,6 +65,6 @@ get_PI_dates <- function(mod,
 
   # convert indx to date_time
   dat_l[,hour := mod$start_time + (hour*3600)]
-  dat_l
-  return(print(dat_l))
+
+  return(dat_l)
 }

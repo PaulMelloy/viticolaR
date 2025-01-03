@@ -140,3 +140,44 @@ plot_weather <- function(mod,
     ggtitle(paste(unique(mod$w$station), "weather observations"))
 }
 
+#' Summary of m_viticola class object
+#'
+#' @param v_mod m_viticola class object, output of function estimate_DM_PI
+#' @param ... other arguments to be passed to summary, currently not used.
+#'
+#' @returns a summary of the model run time, weather station, germinated oospore
+#' @export
+#'
+#' @examples
+#'
+summary.m_viticola <- function(v_mod,...){
+
+  PI_dates <- get_PI_dates(v_mod)
+
+  cat("ViticolaR model summary\n")
+  cat("  Model run time: Start : ",as.character(v_mod$time_hours[1]),"\n")
+  cat("                  End   : ",as.character(v_mod$time_hours[length(v_mod$time_hours)]),"\n")
+  cat("                  Days  : ",round(length(v_mod$w$times)/24,1),"\n")
+  cat("\n")
+  cat("  Weather station : ",unique(v_mod$w$station)," \n")
+  cat("  Germinated oospore cohorts :",v_mod$cohorts, "\n")
+  cat("\n")
+  cat("  Proportion of physiologically mature oospores (PMO) germinated this season : :",
+      v_mod$PMO[length(v_mod$PMO)], "\n")
+  cat("  Estimated sporangia production dates : ",
+      paste(stats::na.exclude(PI_dates[primary_infection_stage == "GEO_h", unique(as.Date(hour))]),
+            collapse = "\n                                          "), "\n")
+  cat("  Estimated Zoospore dispersal dates : ",
+      paste(stats::na.exclude(PI_dates[primary_infection_stage == "ZDI_ind", unique(as.Date(hour))]),
+            collapse = "\n                                        "), "\n")
+  lwer <- stats::na.exclude(PI_dates[primary_infection_stage == "INC_h_lower", unique(as.Date(hour))])
+  uper <- stats::na.exclude(PI_dates[primary_infection_stage == "INC_h_upper", unique(as.Date(hour))])
+  symp_range <- paste(lwer,uper, sep = " - ")
+  cat("  Estimated dates with successful Zoospore infection : ",
+      paste(stats::na.exclude(PI_dates[primary_infection_stage == "ZIN_ind", unique(as.Date(hour))]),
+            collapse = "\n                                        "), "\n")
+  cat("  Estimated dates range for symptom expression : ",
+      paste(symp_range, collapse = "                                                        \n"), "\n")
+
+
+}

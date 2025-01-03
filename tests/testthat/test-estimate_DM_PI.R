@@ -71,6 +71,17 @@ test_that("Indx and hours match",{
                                    as.POSIXct("2023-07-01","UTC"),units = "hours")))
 })
 
+test_that("summary.m_viticolR returns expected output",{
+
+  # Model run time
+  expect_equal(T2$time_hours[1], as.POSIXct("2023-07-01","UTC"))
+  expect_equal(T2$time_hours[length(T2$time_hours)], as.POSIXct("2023-08-30","UTC"))
+
+
+
+})
+
+
 test_that("list element classes are expected",{
   # check character dates are accepted
   Tmod <- estimate_DM_PI(w = nt_weather,
