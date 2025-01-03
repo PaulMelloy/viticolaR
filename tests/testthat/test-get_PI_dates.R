@@ -13,7 +13,26 @@ test_that("Conveniance function returns expected", {
 
 
 
-  # T2 <- get_PI_dates(mod = Tmod)
+  T2 <- estimate_DM_PI(nt_weather,
+                       Start = "2023-07-01",
+                       End = "2023-08-30")
+
+  # get PI_dates summary
+  PI_dates <- get_PI_dates(T2)
+
+  expect_equal(as.character(stats::na.exclude(
+    PI_dates[primary_infection_stage == "GEO_h", unique(as.Date(hour))])),
+    c("2023-07-27", "2023-07-29", "2023-07-31", "2023-08-05", "2023-08-06",
+      "2023-08-21", "2023-08-23", "2023-08-24", "2023-08-26", "2023-08-27"))
+
+  expect_equal(as.character(stats::na.exclude(PI_dates[primary_infection_stage == "ZDI_ind", unique(as.Date(hour))])),
+               "2023-08-06")
+  expect_equal(as.character(stats::na.exclude(PI_dates[primary_infection_stage == "INC_h_lower", unique(as.Date(hour))])),
+               "2023-08-15")
+  expect_equal(as.character(stats::na.exclude(PI_dates[primary_infection_stage == "INC_h_upper", unique(as.Date(hour))])),
+               "2023-08-18")
+  expect_equal(as.character(stats::na.exclude(PI_dates[primary_infection_stage == "ZIN_ind", unique(as.Date(hour))])),
+               "2023-08-06")
 
 
   # library(ggplot2)

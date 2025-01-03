@@ -73,10 +73,21 @@ test_that("Indx and hours match",{
 
 test_that("summary.m_viticolR returns expected output",{
 
-  # Model run time
-  expect_equal(T2$time_hours[1], as.POSIXct("2023-07-01","UTC"))
-  expect_equal(T2$time_hours[length(T2$time_hours)], as.POSIXct("2023-08-30","UTC"))
+  expect_no_error(summary(T2))
 
+  # Model run time
+  expect_equal(T2$time_hours[1],
+               as.POSIXct("2023-07-01","UTC"))
+  expect_equal(T2$time_hours[length(T2$time_hours)],
+               as.POSIXct("2023-08-30","UTC"))
+  expect_equal(round(length(T2$w$times)/24,1),
+               60)
+  expect_equal(unique(T2$w$station),
+               "PORTABLE QFRJ (North Tamborine)")
+  expect_equal(T2$cohorts,
+               18)
+  expect_equal(T2$PMO[length(T2$PMO)],
+               0.2967689,tolerance = 0.0000001)
 
 
 })
