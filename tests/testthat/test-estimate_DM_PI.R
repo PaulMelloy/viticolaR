@@ -12,9 +12,9 @@ test_that("Testing phase of model", {
   expect_type(do.call("c",lapply(T1$cohort_list,"[[","SUS_death_h")),
               "double") # POSIXct ???
   expect_equal(do.call("c",lapply(T1$cohort_list,"[[","GEO_h"))[1:2],
-              c(646,648))
+              c(636,638))
   expect_equal(do.call("c",lapply(T1$cohort_list,"[[","SUS_death_h"))[1:2],
-               c(721,723))
+               c(711,713))
   expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","ZRE_ind"))) == FALSE),
                17)
   expect_equal(sum(is.na(do.call("c",lapply(T1$cohort_list,"[[","ZDI_ind")))),
@@ -50,9 +50,9 @@ test_that("Testing phase of model", {
   # }
 
 
-  expect_equal(T1$cohort_list[[9]]$GEO_h, 871)
-  expect_equal(T1$cohort_list[[9]]$INC_h_lower, 1092)
-  expect_equal(T1$cohort_list[[9]]$INC_h_upper, 1163)
+  expect_equal(T1$cohort_list[[9]]$GEO_h, 861)
+  expect_equal(T1$cohort_list[[9]]$INC_h_lower, 1082)
+  expect_equal(T1$cohort_list[[9]]$INC_h_upper, 1153)
 
 
 })
@@ -70,6 +70,28 @@ test_that("Indx and hours match",{
                as.integer(difftime(last(T2$cohort_list[[10]]$w_c$times),
                                    as.POSIXct("2023-07-01","UTC"),units = "hours")))
 })
+
+test_that("summary.m_viticolR returns expected output",{
+
+  expect_no_error(summary(T2))
+
+  # Model run time
+  expect_equal(T2$time_hours[1],
+               as.POSIXct("2023-07-01","UTC"))
+  expect_equal(T2$time_hours[length(T2$time_hours)],
+               as.POSIXct("2023-08-30","UTC"))
+  expect_equal(round(length(T2$w$times)/24,1),
+               60)
+  expect_equal(unique(T2$w$station),
+               "PORTABLE QFRJ (North Tamborine)")
+  expect_equal(T2$cohorts,
+               18)
+  expect_equal(T2$PMO[length(T2$PMO)],
+               0.2967689,tolerance = 0.0000001)
+
+
+})
+
 
 test_that("list element classes are expected",{
   # check character dates are accepted

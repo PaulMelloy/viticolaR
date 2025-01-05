@@ -133,10 +133,59 @@ plot_weather <- function(mod,
     geom_line(aes(y = temp),colour = "darkred")+
     geom_col(aes(y = rain),
                 colour = "lightblue")+
-    ylab("Temperature C and rainfall (mm)")+
+    ylab("Temperature C (red) and \nrainfall (mm)(bars)")+
     geom_line(aes(y = rh/4),colour = "darkblue",linetype = "dotdash")+
     scale_y_continuous(sec.axis = sec_axis(transform = ~./0.25,name = "Relative Humidity %"))+
     theme_minimal()+
     ggtitle(paste(unique(mod$w$station), "weather observations"))
 }
 
+#' Summary of m_viticola class object
+#'
+#' @param object m_viticola class object, output of function estimate_DM_PI
+#' @param ... other arguments to be passed to summary, currently not used.
+#'
+#' @returns a summary of the model run time, weather station, germinated oospore
+#' @export
+#'
+#' @examples
+#' mod1 <- estimate_DM_PI(w = nt_weather,
+#'                        Start = as.Date("2023-07-01"),
+#'                        End = as.Date("2023-08-30"))
+#' summary(mod1)
+summary.m_viticola <- function(object, ...){
+
+  # Define globals
+  primary_infection_stage <- NULL
+
+  PI_dates <- get_PI_dates(object)
+
+  cat("ViticolaR model summary\n")
+  cat("  Model run time: Start : ",as.character(object$time_hours[1]),"\n")
+  cat("                  End   : ",as.character(object$time_hours[length(object$time_hours)]),"\n")
+  cat("                  Days  : ",round(length(object$w$times)/24,1),"\n")
+  cat("\n")
+  cat("  Weather station : ",unique(object$w$station)," \n")
+  cat("  Germinated oospore cohorts :",object$cohorts, "\n")
+  cat("\n")
+  cat("  Proportion of physiologically mature oospores (PMO) germinated this season : :",
+      object$PMO[length(object$PMO)], "\n")
+  cat("  Estimated sporangia production dates : ",
+      paste(stats::na.exclude(PI_dates[primary_infection_stage == "GEO_h", unique(as.Date(hour))]),
+            collapse = "\n                                          "), "\n")
+  cat("  Estimated Zoospore dispersal dates : ",
+      paste(stats::na.exclude(PI_dates[primary_infection_stage == "ZDI_ind", unique(as.Date(hour))]),
+            collapse = "\n                                        "), "\n")
+  lwer <- stats::na.exclude(PI_dates[primary_infection_stage == "INC_h_lower", unique(as.Date(hour))])
+  uper <- stats::na.exclude(PI_dates[primary_infection_stage == "INC_h_upper", unique(as.Date(hour))])
+  symp_range <- paste(lwer,uper, sep = " - ")
+  cat("  Estimated dates with successful Zoospore infection : ",
+      paste(stats::na.exclude(PI_dates[primary_infection_stage == "ZIN_ind", unique(as.Date(hour))]),
+            collapse = "\n                                        "),
+      "\n")
+  cat("  Estimated dates range for symptom expression : ",
+      paste(symp_range,
+            collapse = "                                                        \n"),
+      "\n")
+
+}

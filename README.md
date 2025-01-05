@@ -12,8 +12,8 @@ Install the R package and dependency (`epiphytoolR`) from github using the follo
 code
 
 ```r
-devtools::install_github("https://github.com/PaulMelloy/viticolaR")
-devtools::install_github("https://github.com/PaulMelloy/epiphytoolR")
+remotes::install_github("https://github.com/PaulMelloy/epiphytoolR")
+remotes::install_github("https://github.com/PaulMelloy/viticolaR")
 ```
 
 ### Format weather data  
@@ -30,8 +30,39 @@ weather data.
 NT_DMod <- estimate_DM_PI(nt_weather)
 ```
 
-Get a formatted output  
+### Inspecting model output  
 
+Return a summary of the model  
+```r
+summary(NT_DMod)
 ```
+
+Get a formatted table output of each state variable
+
+```r
 get_PI_dates(NT_DMod)
+```
+
+#### Plot model progress  
+
+Plot weather data  
+
+```r
+plot_weather(NT_DMod)
+```
+
+Plot oospore cohort progress  
+
+```r
+ggplot2::ggplot() +
+  geom_line_viticolaR(v_mod)
+```
+
+Add a ribbon layer to show when sporangia have fully matured and dispersal is 
+possible
+```r
+ggplot2::ggplot() +
+  geom_line_viticolaR(NT_DMod)+
+  geom_ribbon_viticolaR(NT_DMod)+
+  ggplot2::ylim()
 ```
