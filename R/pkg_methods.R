@@ -188,5 +188,4 @@ summary.m_viticola <- function(object, ...){
             collapse = "                                                        \n"),
       "\n")
 
-  NextMethod("summary")
 }
