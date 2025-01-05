@@ -133,7 +133,7 @@ plot_weather <- function(mod,
     geom_line(aes(y = temp),colour = "darkred")+
     geom_col(aes(y = rain),
                 colour = "lightblue")+
-    ylab("Temperature C and rainfall (mm)")+
+    ylab("Temperature C (red) and \nrainfall (mm)(bars)")+
     geom_line(aes(y = rh/4),colour = "darkblue",linetype = "dotdash")+
     scale_y_continuous(sec.axis = sec_axis(transform = ~./0.25,name = "Relative Humidity %"))+
     theme_minimal()+
