@@ -27,8 +27,8 @@ detect_season <- function(w){
     if(w$times[1] < as.POSIXct(paste0(latest_season,"-07-10"),tz = "UTC")){
       earliest_season <- min(years)
     }else{
-      stop("weather data does not contain observations from within most recent grape
-           growing season")
+      stop(unique(w$station), "weather data does not contain observations from
+      within most recent grape growing season")
     }
 
    return(latest_season)
