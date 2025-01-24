@@ -159,6 +159,15 @@ summary.m_viticola <- function(object, ...){
   primary_infection_stage <- NULL
 
   PI_dates <- get_PI_dates(object)
+  sporangia_produced <- stats::na.exclude(PI_dates[primary_infection_stage == "GEO_h",
+                                                   unique(as.Date(hour))])
+  zoospore_ddates <- stats::na.exclude(PI_dates[primary_infection_stage == "ZDI_ind",
+                                                unique(as.Date(hour))])
+  zoospore_infdates <- stats::na.exclude(PI_dates[primary_infection_stage == "ZIN_ind",
+                                                  unique(as.Date(hour))])
+  lwer <- stats::na.exclude(PI_dates[primary_infection_stage == "INC_h_lower", unique(as.Date(hour))])
+  uper <- stats::na.exclude(PI_dates[primary_infection_stage == "INC_h_upper", unique(as.Date(hour))])
+  symp_range <- paste(lwer,uper, sep = " - ")
 
   cat("ViticolaR model summary\n")
   cat("  Model run time: Start : ",as.character(object$time_hours[1]),"\n")
@@ -170,19 +179,33 @@ summary.m_viticola <- function(object, ...){
   cat("\n")
   cat("  Proportion of physiologically mature oospores (PMO) germinated this season : :",
       object$PMO[length(object$PMO)], "\n")
-  cat("  Estimated sporangia production dates : ",
-      paste(stats::na.exclude(PI_dates[primary_infection_stage == "GEO_h", unique(as.Date(hour))]),
-            collapse = "\n                                          "), "\n")
-  cat("  Estimated Zoospore dispersal dates : ",
-      paste(stats::na.exclude(PI_dates[primary_infection_stage == "ZDI_ind", unique(as.Date(hour))]),
-            collapse = "\n                                        "), "\n")
-  lwer <- stats::na.exclude(PI_dates[primary_infection_stage == "INC_h_lower", unique(as.Date(hour))])
-  uper <- stats::na.exclude(PI_dates[primary_infection_stage == "INC_h_upper", unique(as.Date(hour))])
-  symp_range <- paste(lwer,uper, sep = " - ")
-  cat("  Estimated dates with successful Zoospore infection : ",
-      paste(stats::na.exclude(PI_dates[primary_infection_stage == "ZIN_ind", unique(as.Date(hour))]),
-            collapse = "\n                                        "),
-      "\n")
+  if(length(sporangia_produced < 10)){
+    cat("  Estimated sporangia production dates : ",
+        paste(sporangia_produced,
+              collapse = "\n                                          "), "\n")
+    }else{
+      cat("  Estimated sporangia production dates : ",
+          paste(sporangia_produced,
+                collapse = "   "), "\n")
+            }
+  if(length(zoospore_ddates) < 10){
+    cat("  Estimated Zoospore dispersal dates : ",
+        paste(zoospore_ddates,
+              collapse = "\n                                        "), "\n")
+  }else{
+    cat("  Estimated Zoospore dispersal dates : ",
+        paste(zoospore_ddates,
+              collapse = "   "), "\n")
+    }
+  if(zoospore_infdates <10){
+    cat("  Estimated dates with successful Zoospore infection : ",
+        paste(zoospore_infdates,
+              collapse = "\n                                        "),
+      "\n")}else{
+        cat("  Estimated dates with successful Zoospore infection : ",
+            paste(zoospore_infdates,
+                  collapse = "   "),
+            "\n")}
   cat("  Estimated dates range for symptom expression : ",
       paste(symp_range,
             collapse = "                                                        \n"),
