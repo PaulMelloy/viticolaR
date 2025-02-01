@@ -18,7 +18,7 @@ numeric
 \description{
 Calculate the number of germinated oospores in an hour
 increments using temperature and moisture. Equation 5 of
-\insertCite{rossi_mechanistic_2008}{viticolaR}
+\insertCite{rossi_mechanistic_2008}{viticolR}
 }
 \references{
 \insertAllCited{}

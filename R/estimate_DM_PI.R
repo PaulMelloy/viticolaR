@@ -2,7 +2,7 @@
 #'
 #' Umbrella function to calculate the number of primary infections on grapevine
 #' leaves from overwintering oospores as described by
-#' \insertRef{rossi_mechanistic_2008}{viticolaR}
+#' \insertRef{rossi_mechanistic_2008}{viticolR}
 #'
 #' @param w hourly weather data.table, class epiphy.weather.
 #' @param SOD Proportion of seasonal oospores dose. This starts as 1 in the middle
@@ -18,7 +18,7 @@
 #'  for the southern hemisphere, so the model will End on the last day of June in
 #'  the first season year of the input weather data 'w'.
 #'
-#' @return list, class == m_viticola, containing the model output and downy mildew
+#' @return list, class == m_viticolR, containing the model output and downy mildew
 #'  primary infection progress.
 #'  \tabular{rl}{
 #'   **start_time**: \tab Time in POSIXct format with "UTC" time-zone\cr
@@ -383,7 +383,7 @@ estimate_DM_PI <- function(w,
                          w = w,
                          cohort_list = cohort_list
   )
-  class(m_viticola_out) <- c("m_viticola",class(m_viticola_out))
+  class(m_viticola_out) <- c("m_viticolR",class(m_viticola_out))
 
   return(m_viticola_out)
 

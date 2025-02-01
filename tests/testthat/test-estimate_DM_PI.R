@@ -110,7 +110,7 @@ test_that("we can plot a the output",{
 
   expect_no_condition(
     ggplot2::ggplot()+
-      geom_ribbon_viticolaR(T2)
+      geom_ribbon_viticolR(T2)
   )
 
 

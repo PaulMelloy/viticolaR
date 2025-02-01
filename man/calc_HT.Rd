@@ -16,7 +16,7 @@ numeric, Hydrothermal time
 }
 \description{
 Used to determine what the rate at which oospores mature. Described as equation
-three in \insertRef{rossi_mechanistic_2008}{viticolaR}
+three in \insertRef{rossi_mechanistic_2008}{viticolR}
 }
 \examples{
 calc_HT(24,1)

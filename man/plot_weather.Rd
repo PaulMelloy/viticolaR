@@ -7,7 +7,7 @@
 plot_weather(mod, rolling_window = 4, date_min, date_max)
 }
 \arguments{
-\item{mod}{model output from \code{estimate_DM_PI()} with class 'm_viticola'}
+\item{mod}{model output from \code{estimate_DM_PI()} with class 'm_viticolR'}
 
 \item{rolling_window}{summarise hourly weather data into rolling average
 (temperature and relative humidity), cumulative rainfall and median \code{times}}

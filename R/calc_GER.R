@@ -2,7 +2,7 @@
 #'
 #' Calculate the number of germinated oospores in an hour
 #'  increments using temperature and moisture. Equation 5 of
-#'  \insertCite{rossi_mechanistic_2008}{viticolaR}
+#'  \insertCite{rossi_mechanistic_2008}{viticolR}
 #'
 #' @param M_h integer, indicates if there is sufficient moisture in the hour to
 #'  trigger germination of oospores.

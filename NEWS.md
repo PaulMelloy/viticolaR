@@ -1,5 +1,6 @@
-# viticolaR 0.0.4
- * Add summarising method function for `m_viticolaR` objects
+# viticolR 0.0.4
+ * Change name of package from `viticolaR` to `viticolR`
+ * Add summarising method function for `m_viticolR` objects
  * Add ggplot geom layers for plotting  
  * New feature - plot_weather()  
  * Example fixes in 'Start' and end 'times' which effect timing  

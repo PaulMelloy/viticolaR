@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(data.table)
-library(viticolaR)
+library(viticolR)
 # if epiphytoolR is not installed, install the 'dev' version from github
 if(isFALSE("epiphytoolR" %in% installed.packages()[,"Package"])){
   devtools::install_github("https://github.com/PaulMelloy/epiphytoolR",ref = "dev")

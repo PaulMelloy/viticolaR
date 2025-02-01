@@ -18,7 +18,7 @@
 # nt_weather <- data.table::fread(
 #   system.file("extdata",
 #               "weather_north_tamborine.csv",
-#               package = "viticolaR"))
+#               package = "viticolR"))
 
 nt_weather[,lon := 153.1914]
 nt_weather[,lat := -27.9396]

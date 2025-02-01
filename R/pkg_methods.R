@@ -1,8 +1,8 @@
-#' Plot ribbon viticolaR model
+#' Plot ribbon viticolR model
 #'
-#' @usage geom_ribbon_viticolaR(mod, y = "GER", x_subset = "ZooWindow",...)
-#' @aliases geom_line_viticolaR(mod, y = "GER", ...)
-#' @param mod m_viticola class object, output of function estimate_DM_PI
+#' @usage geom_ribbon_viticolR(mod, y = "GER", x_subset = "ZooWindow",...)
+#' @aliases geom_line_viticolR(mod, y = "GER", ...)
+#' @param mod m_viticolR class object, output of function estimate_DM_PI
 #' @param y character, An output state variable from the estimate_DM_PI, defaults
 #'  to "GER" (germinating oospores), other options include "PMO" (Physiological
 #'  mature oospores), "GEO" (Germinated oospores), "SUS_h" (survival of sporangia),
@@ -22,13 +22,13 @@
 #'                         Start = as.POSIXct("2023-07-01"),
 #'                         End = as.POSIXct("2023-08-30"))
 #' ggplot2::ggplot() +
-#'    geom_ribbon_viticolaR(v_mod)
+#'    geom_ribbon_viticolR(v_mod)
 #'
 #' ggplot2::ggplot() +
-#'    geom_ribbon_viticolaR(v_mod,
+#'    geom_ribbon_viticolR(v_mod,
 #'                          y = "SUZ_h",
 #'                          x_subset = "ZRE_h")
-geom_ribbon_viticolaR <- function(mod,
+geom_ribbon_viticolR <- function(mod,
                      y = "GER",
                      x_subset = "ZooWindow",
                      ...){
@@ -44,9 +44,9 @@ geom_ribbon_viticolaR <- function(mod,
       })
 }
 
-#' Plot line viticolaR model
+#' Plot line viticolR model
 #'
-#' @param mod m_viticola class object, output of function estimate_DM_PI
+#' @param mod m_viticolR class object, output of function estimate_DM_PI
 #' @param y character, An output state variable from the estimate_DM_PI, defaults
 #'  to "GER" other options include "PMO", "GEO", "SUZ_h".
 #' @param ... other arguments to be passed to geom_line
@@ -59,10 +59,10 @@ geom_ribbon_viticolaR <- function(mod,
 #'                         Start = as.POSIXct("2023-07-01"),
 #'                         End = as.POSIXct("2023-08-30"))
 #' ggplot2::ggplot() +
-#'    geom_line_viticolaR(v_mod)
-geom_line_viticolaR <- function(mod,
-                                  y = "GER",
-                                  ...){
+#'    geom_line_viticolR(v_mod)
+geom_line_viticolR <- function(mod,
+                               y = "GER",
+                               ...){
   times <- NULL
 
       lapply(mod$cohort_list,function(x){
@@ -79,7 +79,7 @@ geom_line_viticolaR <- function(mod,
 
 #' Plot viticolR weather
 #'
-#' @param mod model output from `estimate_DM_PI()` with class 'm_viticola'
+#' @param mod model output from `estimate_DM_PI()` with class 'm_viticolR'
 #' @param rolling_window summarise hourly weather data into rolling average
 #'  (temperature and relative humidity), cumulative rainfall and median `times`
 #' @param date_min as.posix date minimum for x-axis of plot
@@ -100,7 +100,7 @@ plot_weather <- function(mod,
   # conciliate missing globals
   time_factor <- times <- temp <- rh <- rain <- NULL
 
-  if(isFALSE(inherits(mod,what = "m_viticola"))) stop("'mod' is not class 'm_viticola'.
+  if(isFALSE(inherits(mod,what = "m_viticolR"))) stop("'mod' is not class 'm_viticolR'.
                                                         Please use an output of 'estimate_DM_PI()'")
   if(missing(date_min)){
     if(missing(date_max)){
@@ -140,9 +140,9 @@ plot_weather <- function(mod,
     ggtitle(paste(unique(mod$w$station), "weather observations"))
 }
 
-#' Summary of m_viticola class object
+#' Summary of m_viticolR class object
 #'
-#' @param object m_viticola class object, output of function estimate_DM_PI
+#' @param object m_viticolR class object, output of function estimate_DM_PI
 #' @param ... other arguments to be passed to summary, currently not used.
 #'
 #' @returns a summary of the model run time, weather station, germinated oospore
@@ -153,7 +153,7 @@ plot_weather <- function(mod,
 #'                        Start = as.Date("2023-07-01"),
 #'                        End = as.Date("2023-08-30"))
 #' summary(mod1)
-summary.m_viticola <- function(object, ...){
+summary.m_viticolR <- function(object, ...){
 
   # Define globals
   primary_infection_stage <- NULL
@@ -169,7 +169,7 @@ summary.m_viticola <- function(object, ...){
   uper <- stats::na.exclude(PI_dates[primary_infection_stage == "INC_h_upper", unique(as.Date(hour))])
   symp_range <- paste(lwer,uper, sep = " - ")
 
-  cat("ViticolaR model summary\n")
+  cat("ViticolR model summary\n")
   cat("  Model run time: Start : ",as.character(object$time_hours[1]),"\n")
   cat("                  End   : ",as.character(object$time_hours[length(object$time_hours)]),"\n")
   cat("                  Days  : ",round(length(object$w$times)/24,1),"\n")
@@ -179,14 +179,14 @@ summary.m_viticola <- function(object, ...){
   cat("\n")
   cat("  Proportion of physiologically mature oospores (PMO) germinated this season : :",
       object$PMO[length(object$PMO)], "\n")
-  if(length(sporangia_produced < 10)){
+  if(length(sporangia_produced) < 10){
     cat("  Estimated sporangia production dates : ",
         paste(sporangia_produced,
               collapse = "\n                                          "), "\n")
     }else{
       cat("  Estimated sporangia production dates : ",
           paste(sporangia_produced,
-                collapse = "   "), "\n")
+                collapse = "   "), "\n\n")
             }
   if(length(zoospore_ddates) < 10){
     cat("  Estimated Zoospore dispersal dates : ",
@@ -195,9 +195,9 @@ summary.m_viticola <- function(object, ...){
   }else{
     cat("  Estimated Zoospore dispersal dates : ",
         paste(zoospore_ddates,
-              collapse = "   "), "\n")
+              collapse = "   "), "\n\n")
     }
-  if(zoospore_infdates <10){
+  if(length(zoospore_infdates) <10){
     cat("  Estimated dates with successful Zoospore infection : ",
         paste(zoospore_infdates,
               collapse = "\n                                        "),
@@ -205,7 +205,7 @@ summary.m_viticola <- function(object, ...){
         cat("  Estimated dates with successful Zoospore infection : ",
             paste(zoospore_infdates,
                   collapse = "   "),
-            "\n")}
+            "\n\n")}
   cat("  Estimated dates range for symptom expression : ",
       paste(symp_range,
             collapse = "                                                        \n"),

@@ -8,38 +8,38 @@ ntw <- estimate_DM_PI(
 test_that("geom_ribbon works",{
   p1g <-
     ggplot2::ggplot() +
-    geom_ribbon_viticolaR(ntw,,y = "GER")
+    geom_ribbon_viticolR(ntw,,y = "GER")
 
   expect_s3_class(p1g, "ggplot")
   expect_s3_class(p1g, "gg")
 
   p1p <-
     ggplot2::ggplot() +
-    geom_ribbon_viticolaR(ntw,y = "PMO")
+    geom_ribbon_viticolR(ntw,y = "PMO")
   expect_s3_class(p1p, "ggplot")
   expect_s3_class(p1p, "gg")
 
   p12g <-
     ggplot2::ggplot() +
-    geom_ribbon_viticolaR(ntw,y = "GEO")
+    geom_ribbon_viticolR(ntw,y = "GEO")
   expect_s3_class(p12g, "ggplot")
   expect_s3_class(p12g, "gg")
 
   p1s <-
     ggplot2::ggplot() +
-    geom_ribbon_viticolaR(ntw,y = "SUS_h")
+    geom_ribbon_viticolR(ntw,y = "SUS_h")
   expect_s3_class(p1s, "ggplot")
   expect_s3_class(p1s, "gg")
 
   p1z <-
     ggplot2::ggplot() +
-    geom_ribbon_viticolaR(ntw,y = "SUZ_h",x_subset = "ZRE_h")
+    geom_ribbon_viticolR(ntw,y = "SUZ_h",x_subset = "ZRE_h")
   expect_s3_class(p1z, "ggplot")
   expect_s3_class(p1z, "gg")
 
   p1z <-
     ggplot2::ggplot() +
-    geom_ribbon_viticolaR(ntw,y = "SUZ_h")
+    geom_ribbon_viticolR(ntw,y = "SUZ_h")
   expect_s3_class(p1z, "ggplot")
   expect_s3_class(p1z, "gg")
 

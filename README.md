@@ -1,4 +1,4 @@
-# viticolaR
+# viticolR
 A mechanistic compartment model to assist in fungicide decision support for 
 downy mildew (*Plasmodia viticola*) infections in grapevines.
 This model is translated and adapted from 
@@ -13,7 +13,7 @@ code
 
 ```r
 remotes::install_github("https://github.com/PaulMelloy/epiphytoolR")
-remotes::install_github("https://github.com/PaulMelloy/viticolaR")
+remotes::install_github("https://github.com/PaulMelloy/viticolR")
 ```
 
 ### Format weather data  
@@ -21,7 +21,7 @@ The model only requires clean weather data formatted with `epiphytoolR::format_w
 function.
 The package contains a clean dataset `nt_weather` which is already formatted using
 this method.
-See [example code](https://github.com/PaulMelloy/viticolaR/blob/main/data-raw/DATASET.R)
+See [example code](https://github.com/PaulMelloy/viticolR/blob/main/data-raw/DATASET.R)
 for how to format weather data from BOM sources, including m=imputing missing 
 weather data.  
 
@@ -55,14 +55,14 @@ Plot oospore cohort progress
 
 ```r
 ggplot2::ggplot() +
-  geom_line_viticolaR(v_mod)
+  geom_line_viticolR(v_mod)
 ```
 
 Add a ribbon layer to show when sporangia have fully matured and dispersal is 
 possible
 ```r
 ggplot2::ggplot() +
-  geom_line_viticolaR(NT_DMod)+
-  geom_ribbon_viticolaR(NT_DMod)+
+  geom_line_viticolR(NT_DMod)+
+  geom_ribbon_viticolR(NT_DMod)+
   ggplot2::ylim()
 ```

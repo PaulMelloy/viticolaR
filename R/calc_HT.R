@@ -1,7 +1,7 @@
 #' Calculate Hydrothermal Time
 #'
 #' Used to determine what the rate at which oospores mature. Described as equation
-#'  three in \insertRef{rossi_mechanistic_2008}{viticolaR}
+#'  three in \insertRef{rossi_mechanistic_2008}{viticolR}
 #'
 #' @param Tm_h hourly temperature in degrees
 #' @param M_h logical, Leaf litter moisture sufficient for maturation

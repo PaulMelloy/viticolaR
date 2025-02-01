@@ -25,7 +25,7 @@ in the northern hemisphere. Also referred to as 'morphologically mature oospores
 (MMO).}
 }
 \value{
-list, class == m_viticola, containing the model output and downy mildew
+list, class == m_viticolR, containing the model output and downy mildew
 primary infection progress.
 \tabular{rl}{
 \strong{start_time}: \tab Time in POSIXct format with "UTC" time-zone\cr
@@ -47,7 +47,7 @@ of weather conditions meeting the threshold\cr
 \description{
 Umbrella function to calculate the number of primary infections on grapevine
 leaves from overwintering oospores as described by
-\insertRef{rossi_mechanistic_2008}{viticolaR}
+\insertRef{rossi_mechanistic_2008}{viticolR}
 }
 \examples{
 mod1 <- estimate_DM_PI(w = nt_weather,
